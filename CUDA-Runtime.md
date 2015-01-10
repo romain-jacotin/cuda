@@ -85,19 +85,14 @@
 | cudaErrorStartupFailure | 0x7f | This indicates an internal startup failure in the CUDA runtime. |
 | cudaErrorApiFailureBase | 10000 | Any unhandled CUDA driver error is added to this value and returned via the runtime. Production releases of CUDA should not return such errors. Deprecated This error return is deprecated as of CUDA 4.1. |
 
-## CUDA 6.5 VERSION MANAGEMENT
----------------------------
+## CUDA Version Management
 
-| Function |
-|---|
-|cudaError_t cudaDriverGetVersion (int *driverVersion)
-  Returns the CUDA driver version.
-	cudaError_t = cudaSuccess, cudaErrorInvalidValue|
+| Function | Description | Error types |
+|---|---|---|
+| cudaError_t cudaDriverGetVersion (int *driverVersion) | Returns the CUDA driver version. | cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaRuntimeGetVersion (int *runtimeVersion) | Returns the CUDA Runtime version. | cudaError_t = cudaSuccess, cudaErrorInvalidValue |
 
 
-cudaError_t cudaRuntimeGetVersion (int *runtimeVersion)
-	Returns the CUDA Runtime version.
-	cudaError_t = cudaSuccess, cudaErrorInvalidValue
 
 
 
