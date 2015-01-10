@@ -87,10 +87,12 @@
 
 ## CUDA Version Management
 
-| Function | Description | Error types |
-|---|---|---|
-| cudaError_t cudaDriverGetVersion (int *driverVersion) | Returns the CUDA driver version. | cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaRuntimeGetVersion (int *runtimeVersion) | Returns the CUDA Runtime version. | cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| Function | Description |
+|---|---|
+| cudaError_t cudaDriverGetVersion (int *driverVersion) | Returns the CUDA driver version.
+cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaRuntimeGetVersion (int *runtimeVersion) | Returns the CUDA Runtime version.
+cudaError_t = cudaSuccess, cudaErrorInvalidValue |
 
 
 
