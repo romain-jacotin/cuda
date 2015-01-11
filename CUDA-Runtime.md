@@ -1,27 +1,27 @@
 # CUDA Runtime API 6.5
 
-Each CUDA Runtime function returns a cudaError_t which takes one of [CUDA Error Types][] values.
+Each CUDA Runtime function returns a cudaError_t which takes one of [CUDA Error Types](#cudaerrortype) values.
 
 CUDA Runtime functions are described in the following modules:
 
-* [CUDA Version Management][]
-* [CUDA Error Handling][]
-* [CUDA Profiler Control][]
-* [CUDA Device Management][]
-* [CUDA Stream Management][]
-* [CUDA Event Management][]
-* [CUDA Execution Control][]
-* [CUDA Occupancy][]
-* [CUDA Memory Management][]
-* [CUDA Unified Addressing][]
-* [CUDA Peer Device Memory Access][]
+* [CUDA Version Management](#cudaversionmanagement)
+* [CUDA Error Handling](#cudaerrorhandling)
+* [CUDA Profiler Control](#cudaprofilercontrol)
+* [CUDA Device Management](#cudadevicemanagement)
+* [CUDA Stream Management](#cudastreammanagement)
+* [CUDA Event Management](#cudaeventmanagement)
+* [CUDA Execution Control](#cudaexecutioncontrol)
+* [CUDA Occupancy](#cudaoccupancy)
+* [CUDA Memory Management](#cudamemorymanagement)
+* [CUDA Unified Addressing](#cudaunifiedaddressing)
+* [CUDA Peer Device Memory Access](#cudapeerdevicememoryaccess)
 
 NOTES:
 
 * there are others modules that describe OpenGL, Direct3D, Textures, Surfaces, ...
 * Go to [https://developer.nvidia.com/cuda-zone](https://developer.nvidia.com/cuda-zone) for more information.
 
-## CUDA Error Types ##
+## <A name="cudaerrortype"></A> CUDA Error Types
 
 | cudaError | value | Description |
 |:---|---:|---|
@@ -106,14 +106,14 @@ NOTES:
 | cudaErrorStartupFailure | 0x7f | This indicates an internal startup failure in the CUDA runtime. |
 | cudaErrorApiFailureBase | 10000 | Any unhandled CUDA driver error is added to this value and returned via the runtime. Production releases of CUDA should not return such errors. Deprecated This error return is deprecated as of CUDA 4.1. |
 
-## CUDA Version Management
+## <A name="cudaversionmanagement"></A> CUDA Version Management
 
 | Function | Description |
 |---|---|
 | <B>cudaDriverGetVersion</B><BR> (int *driverVersion) | Returns the CUDA driver version. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
 | <B>cudaRuntimeGetVersion</B><BR> (int *runtimeVersion) | Returns the CUDA Runtime version. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
 
-## CUDA Error Handling
+## <A name="cudaerrorhandling"></A> CUDA Error Handling
 
 | Function | Description |
 |---|---|
@@ -122,7 +122,7 @@ NOTES:
 | <B>cudaGetLastError</B (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread and resets it to cudaSuccess. |
 | <B>cudaPeekAtLastError</B><BR> (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread. <BR><BR> Note that this call does not reset the error to cudaSuccess like cudaGetLastError(). |
 
-## CUDA Profiler Control
+## <A name="cudaprofilercontrol"></A> CUDA Profiler Control
 
 | Function | Description |
 |---|---|
@@ -130,7 +130,7 @@ NOTES:
 | <B>cudaProfilerStart</B><BR> (void) | Enable profiling. <BR><BR> cudaError_t = cudaSuccess |
 | <B>cudaProfilerStop</B><BR> (void) | Disable profiling. <BR><BR> cudaError_t = cudaSuccess |
 
-## CUDA Device Management
+## <A name="cudadevicemanagement"></A> CUDA Device Management
 
 | Function | Description |
 |---|---|
@@ -159,7 +159,7 @@ NOTES:
 | <B>cudaIpcGetMemHandle</B><BR> (cudaIpcMemHandle_t *handle, void *devPtr) | Gets an interprocess memory handle for an existing device memory allocation. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorMemoryAllocation, cudaErrorMapBufferObjectFailed |
 | <B>cudaIpcCloseMemHandle</B><BR> (void *devPtr) | Close memory mapped with cudaIpcOpenMemHandle. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle |
 
-## CUDA Stream Management
+## <A name="cudastreammanagement"></A> CUDA Stream Management
 
 | Function | Description |
 |---|---|
@@ -175,7 +175,7 @@ NOTES:
 | <B>cudaStreamWaitEvent</B><BR> (cudaStream_t stream, cudaEvent_t event, unsigned int flags) | Make a compute stream wait on an event. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
 | <B>cudaStreamDestroy</B><BR> (cudaStream_t stream) | Destroys and cleans up an asynchronous stream. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
 
-## CUDA Event Management
+## <A name="cudaeventmanagement"></A> CUDA Event Management
 
 | Function | Description |
 |---|---|
@@ -187,7 +187,7 @@ NOTES:
 | <B>cudaEventRecord</B><BR> (cudaEvent_t event, cudaStream_t stream) | Records an event. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
 | <B>cudaEventSynchronize</B><BR> (cudaEvent_t event) | Waits for an event to complete. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
 
-## CUDA Execution Control
+## <A name="cudaexecutioncontrol"></A> CUDA Execution Control
 
 | Function | Description |
 |---|---|
@@ -200,13 +200,13 @@ NOTES:
 | <B>cudaSetDoubleForDevice</B><BR> (double *d) | Converts a double argument to be executed on a device. <BR><BR> cudaError_t = cudaSuccess |
 | <B>cudaSetDoubleForHost</B><BR> (double *d) | Converts a double argument after execution on a device. <BR><BR> cudaError_t = cudaSuccess |
 
-## CUDA Occupancy
+## <A name="cudaoccupancy"></A> CUDA Occupancy
 
 | Function | Description |
 |---|---|
 | <B>cudaOccupancyMaxActiveBlocksPerMultiprocessor</B><BR> (int *numBlocks, const void *func, int blockSize, size_t dynamicSMemSize) | Returns occupancy for a device function. <BR><BR> cudaError_t = cudaSuccess, cudaErrorCudartUnloading, cudaErrorInitializationError, cudaErrorInvalidDevice, cudaErrorInvalidDeviceFunction, cudaErrorInvalidValue, cudaErrorUnknown |
 
-## CUDA Memory Management
+## <A name="cudamemorymanagement"></A> CUDA Memory Management
 
 | Function | Description |
 |---|---|
@@ -264,13 +264,13 @@ NOTES:
 | <B>cudaMemset3DAsync</B><BR> (cudaPitchedPtr pitchedDevPtr, int value, cudaExtent extent, cudaStream_t stream) | Initializes or sets device memory to a value. <BR><BR>	cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
 | <B>cudaMemsetAsync</B><BR> (void *devPtr, int value, size_t count, cudaStream_t stream) | Initializes or sets device memory to a value. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
 
-## CUDA Unified Addressing
+## <A name="cudaunifiedaddressing"></A> CUDA Unified Addressing
 
 | Function | Description |
 |---|---|
 | <B>cudaPointerGetAttributes</B><BR> (cudaPointerAttributes *attributes, const void *ptr) | Returns attributes about a specified pointer. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice cudaErrorInvalidValue |
 
-## CUDA Peer Device Memory Access
+## <A name="cudapeerdevicememoryaccess"></A> CUDA Peer Device Memory Access
 
 | Function | Description |
 |---|---|
