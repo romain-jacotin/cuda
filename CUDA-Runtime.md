@@ -156,6 +156,8 @@
 
 ## CUDA Event Management
 
+| Function | Description |
+|---|---|
 | cudaError_t cudaEventCreate (cudaEvent_t *event) | Creates an event object. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure, cudaErrorMemoryAllocation |
 | cudaError_t cudaEventCreateWithFlags (cudaEvent_t *event, unsigned int flags) | Creates an event object with the specified flags. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure, cudaErrorMemoryAllocation |
 | cudaError_t cudaEventDestroy (cudaEvent_t event) | Destroys an event object. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure |
@@ -166,6 +168,8 @@
 
 ## CUDA Execution Control
 
+| Function | Description |
+|---|---|
 | cudaError_t cudaConfigureCall (dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream) | Configure a device-launch. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidConfiguration |
 | cudaError_t cudaSetupArgument (const void *arg, size_t size, size_t offset) | Configure a device launch. <BR> cudaError_t = cudaSuccess |
 | cudaError_t cudaLaunch (const void *func) | Launches a device function. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDeviceFunction, cudaErrorInvalidConfiguration, cudaErrorLaunchFailure, cudaErrorLaunchTimeout, cudaErrorLaunchOutOfResources, cudaErrorSharedObjectInitFailed |
@@ -177,10 +181,14 @@
 
 ## CUDA Occupancy
 
+| Function | Description |
+|---|---|
 | cudaError_t cudaOccupancyMaxActiveBlocksPerMultiprocessor (int *numBlocks, const void *func, int blockSize, size_t dynamicSMemSize) | Returns occupancy for a device function. <BR> cudaError_t = cudaSuccess, cudaErrorCudartUnloading, cudaErrorInitializationError, cudaErrorInvalidDevice, cudaErrorInvalidDeviceFunction, cudaErrorInvalidValue, cudaErrorUnknown |
 
 ## CUDA Memory Management
 
+| Function | Description |
+|---|---|
 | cudaError_t cudaMemGetInfo (size_t *free, size_t *total) | Gets free and total device memory. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure |
 | cudaError_t cudaMalloc (void **devPtr, size_t size) | Allocate memory on the device. <BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
 | cudaError_t cudaFree (void *devPtr) | Frees memory on the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevicePointer, cudaErrorInitializationError |
@@ -237,10 +245,14 @@
 
 ## CUDA Unified Addressing
 
+| Function | Description |
+|---|---|
 | cudaError_t cudaPointerGetAttributes (cudaPointerAttributes *attributes, const void *ptr) | Returns attributes about a specified pointer. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice cudaErrorInvalidValue |
 
 ## CUDA Peer Device Memory Access
 
+| Function | Description |
+|---|---|
 | cudaError_t cudaDeviceCanAccessPeer (int *canAccessPeer, int device, int peerDevice) | Queries if a device may directly access a peer device's memory. <BR> 	cudaError_t = cudaSuccess, cudaErrorInvalidDevice |
 | cudaError_t cudaDeviceDisablePeerAccess (int peerDevice) | Disables direct access to memory allocations on a peer device. <BR> cudaError_t = cudaSuccess, cudaErrorPeerAccessNotEnabled, cudaErrorInvalidDevice |
 | cudaError_t cudaDeviceEnablePeerAccess (int peerDevice, unsigned int flags) | Enables direct access to memory allocations on a peer device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorPeerAccessAlreadyEnabled, cudaErrorInvalidValue |
