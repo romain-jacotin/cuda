@@ -89,8 +89,8 @@
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaDriverGetVersion (int *driverVersion) | Returns the CUDA driver version. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaRuntimeGetVersion (int *runtimeVersion) | Returns the CUDA Runtime version. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaDriverGetVersion (int *driverVersion) | Returns the CUDA driver version. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaRuntimeGetVersion (int *runtimeVersion) | Returns the CUDA Runtime version. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
 
 ## CUDA Error Handling
 
@@ -99,161 +99,161 @@
 | const __cudart_builtin__ char *cudaGetErrorName (cudaError_t error) | Returns the string representation of an error code enum name. |
 | const __cudart_builtin__ char *cudaGetErrorString (cudaError_t error) | Returns the description string for an error code. |
 | cudaError_t cudaGetLastError (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread and resets it to cudaSuccess. |
-| cudaError_t cudaPeekAtLastError (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread. <BR> Note that this call does not reset the error to cudaSuccess like cudaGetLastError(). |
+| cudaError_t cudaPeekAtLastError (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread. <BR><BR> Note that this call does not reset the error to cudaSuccess like cudaGetLastError(). |
 
 ## CUDA Profiler Control
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaProfilerInitialize (const char *configFile, const char *outputFile, cudaOutputMode_t outputMode) | Initialize the CUDA profiler. <BR> cudaError_t = 	cudaSuccess, cudaErrorInvalidValue, cudaErrorProfilerDisabled |
-| cudaError_t cudaProfilerStart (void) | Enable profiling. <BR> cudaError_t = cudaSuccess |
-| cudaError_t cudaProfilerStop (void) | Disable profiling. <BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaProfilerInitialize (const char *configFile, const char *outputFile, cudaOutputMode_t outputMode) | Initialize the CUDA profiler. <BR><BR> cudaError_t = 	cudaSuccess, cudaErrorInvalidValue, cudaErrorProfilerDisabled |
+| cudaError_t cudaProfilerStart (void) | Enable profiling. <BR><BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaProfilerStop (void) | Disable profiling. <BR><BR> cudaError_t = cudaSuccess |
 
 ## CUDA Device Management
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaGetDeviceCount (int *count) | Returns the number of compute-capable devices. <BR> cudaError_t = cudaSuccess, cudaErrorNoDevice, cudaErrorInsufficientDriver |
-| cudaError_t cudaDeviceGetAttribute (int *value, cudaDeviceAttr attr, int device) | Returns information about the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorInvalidValue |
-| cudaError_t cudaSetDevice (int device) | Set device to be used for GPU executions. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorDeviceAlreadyInUse |
-| cudaError_t cudaSetDeviceFlags (unsigned int flags) | Sets flags to be used for device executions. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorSetOnActiveProcess |
-| cudaError_t cudaSetValidDevices (int *device_arr, int len) | Set a list of devices that can be used for CUDA. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
-| cudaError_t cudaGetDeviceProperties (cudaDeviceProp *prop, int device) | Returns information about the compute-device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice |
-| cudaError_t cudaChooseDevice (int *device, const cudaDeviceProp *prop) | Select compute-device which best matches criteria. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaGetDevice (int *device) | Returns which device is currently being used. <BR> cudaError_t = cudaSuccess |
-| cudaError_t cudaDeviceGetCacheConfig (cudaFuncCache *pCacheConfig) | Returns the preferred cache configuration for the current device. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError |
-| cudaError_t cudaDeviceSetCacheConfig (cudaFuncCache cacheConfig) | Sets the preferred cache configuration for the current device. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError |
-| cudaError_t cudaDeviceGetLimit (size_t *pValue, cudaLimit limit) | Returns resource limits. <BR> cudaError_t = cudaSuccess, cudaErrorUnsupportedLimit, cudaErrorInvalidValue |
-| cudaError_t cudaDeviceSetLimit (cudaLimit limit, size_t value) | Set resource limits. <BR> cudaError_t = cudaSuccess, cudaErrorUnsupportedLimit, cudaErrorInvalidValue, cudaErrorMemoryAllocation |
-| cudaError_t cudaDeviceGetPCIBusId (char *pciBusId, int len, int device) | Returns a PCI Bus Id string for the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
-| cudaError_t cudaDeviceGetByPCIBusId (int *device, const char *pciBusId) | Returns a handle to a compute device. <BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
-| cudaError_t cudaDeviceGetSharedMemConfig (cudaSharedMemConfig *pConfig) | Returns the shared memory configuration for the current device. <BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
-| cudaError_t cudaDeviceSetSharedMemConfig (cudaSharedMemConfig config) | Sets the shared memory configuration for the current device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
-| cudaError_t cudaDeviceGetStreamPriorityRange (int *leastPriority, int *greatestPriority) | Returns numerical values that correspond to the least and greatest stream priorities. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaDeviceReset (void) | Destroy all allocations and reset all state on the current device in the current process. <BR> cudaError_t = cudaSuccess |
-| cudaError_t cudaDeviceSynchronize (void) | Wait for compute device to finish. <BR> cudaError_t = cudaSuccess |
-| cudaError_t cudaIpcOpenEventHandle (cudaEvent_t *event, cudaIpcEventHandle_t handle) | Opens an interprocess event handle for use in the current process. <BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle |
-| cudaError_t cudaIpcGetEventHandle (cudaIpcEventHandle_t *handle, cudaEvent_t event) | Gets an interprocess handle for a previously allocated event. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorMemoryAllocation, cudaErrorMapBufferObjectFailed |
-| cudaError_t cudaIpcOpenMemHandle (void **devPtr, cudaIpcMemHandle_t handle, unsigned int flags) | Opens an interprocess memory handle exported from another process and returns a device pointer usable in the local process. <BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle, cudaErrorTooManyPeers |
-| cudaError_t cudaIpcGetMemHandle (cudaIpcMemHandle_t *handle, void *devPtr) | Gets an interprocess memory handle for an existing device memory allocation. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorMemoryAllocation, cudaErrorMapBufferObjectFailed |
-| cudaError_t cudaIpcCloseMemHandle (void *devPtr) | Close memory mapped with cudaIpcOpenMemHandle. <BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaGetDeviceCount (int *count) | Returns the number of compute-capable devices. <BR><BR> cudaError_t = cudaSuccess, cudaErrorNoDevice, cudaErrorInsufficientDriver |
+| cudaError_t cudaDeviceGetAttribute (int *value, cudaDeviceAttr attr, int device) | Returns information about the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorInvalidValue |
+| cudaError_t cudaSetDevice (int device) | Set device to be used for GPU executions. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorDeviceAlreadyInUse |
+| cudaError_t cudaSetDeviceFlags (unsigned int flags) | Sets flags to be used for device executions. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorSetOnActiveProcess |
+| cudaError_t cudaSetValidDevices (int *device_arr, int len) | Set a list of devices that can be used for CUDA. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaGetDeviceProperties (cudaDeviceProp *prop, int device) | Returns information about the compute-device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice |
+| cudaError_t cudaChooseDevice (int *device, const cudaDeviceProp *prop) | Select compute-device which best matches criteria. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaGetDevice (int *device) | Returns which device is currently being used. <BR><BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaDeviceGetCacheConfig (cudaFuncCache *pCacheConfig) | Returns the preferred cache configuration for the current device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError |
+| cudaError_t cudaDeviceSetCacheConfig (cudaFuncCache cacheConfig) | Sets the preferred cache configuration for the current device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError |
+| cudaError_t cudaDeviceGetLimit (size_t *pValue, cudaLimit limit) | Returns resource limits. <BR><BR> cudaError_t = cudaSuccess, cudaErrorUnsupportedLimit, cudaErrorInvalidValue |
+| cudaError_t cudaDeviceSetLimit (cudaLimit limit, size_t value) | Set resource limits. <BR><BR> cudaError_t = cudaSuccess, cudaErrorUnsupportedLimit, cudaErrorInvalidValue, cudaErrorMemoryAllocation |
+| cudaError_t cudaDeviceGetPCIBusId (char *pciBusId, int len, int device) | Returns a PCI Bus Id string for the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaDeviceGetByPCIBusId (int *device, const char *pciBusId) | Returns a handle to a compute device. <BR><BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaDeviceGetSharedMemConfig (cudaSharedMemConfig *pConfig) | Returns the shared memory configuration for the current device. <BR><BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
+| cudaError_t cudaDeviceSetSharedMemConfig (cudaSharedMemConfig config) | Sets the shared memory configuration for the current device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
+| cudaError_t cudaDeviceGetStreamPriorityRange (int *leastPriority, int *greatestPriority) | Returns numerical values that correspond to the least and greatest stream priorities. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaDeviceReset (void) | Destroy all allocations and reset all state on the current device in the current process. <BR><BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaDeviceSynchronize (void) | Wait for compute device to finish. <BR><BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaIpcOpenEventHandle (cudaEvent_t *event, cudaIpcEventHandle_t handle) | Opens an interprocess event handle for use in the current process. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaIpcGetEventHandle (cudaIpcEventHandle_t *handle, cudaEvent_t event) | Gets an interprocess handle for a previously allocated event. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorMemoryAllocation, cudaErrorMapBufferObjectFailed |
+| cudaError_t cudaIpcOpenMemHandle (void **devPtr, cudaIpcMemHandle_t handle, unsigned int flags) | Opens an interprocess memory handle exported from another process and returns a device pointer usable in the local process. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle, cudaErrorTooManyPeers |
+| cudaError_t cudaIpcGetMemHandle (cudaIpcMemHandle_t *handle, void *devPtr) | Gets an interprocess memory handle for an existing device memory allocation. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorMemoryAllocation, cudaErrorMapBufferObjectFailed |
+| cudaError_t cudaIpcCloseMemHandle (void *devPtr) | Close memory mapped with cudaIpcOpenMemHandle. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle |
 
 ## CUDA Stream Management
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaStreamAddCallback (cudaStream_t stream, cudaStreamCallback_t callback, void *userData, unsigned int flags) | Add a callback to a compute stream. <BR> 	cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorNotSupported |
-| cudaError_t cudaStreamAttachMemAsync (cudaStream_t stream, void *devPtr, size_t length, unsigned int flags) |	Attach memory to a stream asynchronously. <BR> 	cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInvalidValue cudaErrorInvalidResourceHandle |
-| cudaError_t cudaStreamCreate (cudaStream_t *pStream) | Create an asynchronous stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaStreamCreateWithFlags (cudaStream_t *pStream, unsigned int flags) | Create an asynchronous stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaStreamCreateWithPriority (cudaStream_t *pStream, unsigned int flags, int priority) | Create an asynchronous stream with the specified priority. <BR> 	cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaStreamGetFlags (cudaStream_t hStream, unsigned int *flags) | Query the flags of a stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle |
-| cudaError_t cudaStreamGetPriority (cudaStream_t hStream, int *priority) | Query the priority of a stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle |
-| cudaError_t cudaStreamQuery (cudaStream_t stream) | Queries an asynchronous stream for completion status. <BR> cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInvalidResourceHandle |
-| cudaError_t cudaStreamSynchronize (cudaStream_t stream) | Waits for stream tasks to complete. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
-| cudaError_t cudaStreamWaitEvent (cudaStream_t stream, cudaEvent_t event, unsigned int flags) | Make a compute stream wait on an event. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
-| cudaError_t cudaStreamDestroy (cudaStream_t stream) | Destroys and cleans up an asynchronous stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamAddCallback (cudaStream_t stream, cudaStreamCallback_t callback, void *userData, unsigned int flags) | Add a callback to a compute stream. <BR><BR> 	cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorNotSupported |
+| cudaError_t cudaStreamAttachMemAsync (cudaStream_t stream, void *devPtr, size_t length, unsigned int flags) |	Attach memory to a stream asynchronously. <BR><BR> 	cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInvalidValue cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamCreate (cudaStream_t *pStream) | Create an asynchronous stream. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaStreamCreateWithFlags (cudaStream_t *pStream, unsigned int flags) | Create an asynchronous stream. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaStreamCreateWithPriority (cudaStream_t *pStream, unsigned int flags, int priority) | Create an asynchronous stream with the specified priority. <BR><BR> 	cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaStreamGetFlags (cudaStream_t hStream, unsigned int *flags) | Query the flags of a stream. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamGetPriority (cudaStream_t hStream, int *priority) | Query the priority of a stream. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamQuery (cudaStream_t stream) | Queries an asynchronous stream for completion status. <BR><BR> cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamSynchronize (cudaStream_t stream) | Waits for stream tasks to complete. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamWaitEvent (cudaStream_t stream, cudaEvent_t event, unsigned int flags) | Make a compute stream wait on an event. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamDestroy (cudaStream_t stream) | Destroys and cleans up an asynchronous stream. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
 
 ## CUDA Event Management
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaEventCreate (cudaEvent_t *event) | Creates an event object. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure, cudaErrorMemoryAllocation |
-| cudaError_t cudaEventCreateWithFlags (cudaEvent_t *event, unsigned int flags) | Creates an event object with the specified flags. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure, cudaErrorMemoryAllocation |
-| cudaError_t cudaEventDestroy (cudaEvent_t event) | Destroys an event object. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure |
-| cudaError_t cudaEventElapsedTime (float *ms, cudaEvent_t start, cudaEvent_t end) | Computes the elapsed time between events. <BR> cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInvalidValue, cudaErrorInitializationError, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
-| cudaError_t cudaEventQuery (cudaEvent_t event) | Queries an event's status. <BR> cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
-| cudaError_t cudaEventRecord (cudaEvent_t event, cudaStream_t stream) | Records an event. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
-| cudaError_t cudaEventSynchronize (cudaEvent_t event) | Waits for an event to complete. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
+| cudaError_t cudaEventCreate (cudaEvent_t *event) | Creates an event object. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure, cudaErrorMemoryAllocation |
+| cudaError_t cudaEventCreateWithFlags (cudaEvent_t *event, unsigned int flags) | Creates an event object with the specified flags. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure, cudaErrorMemoryAllocation |
+| cudaError_t cudaEventDestroy (cudaEvent_t event) | Destroys an event object. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure |
+| cudaError_t cudaEventElapsedTime (float *ms, cudaEvent_t start, cudaEvent_t end) | Computes the elapsed time between events. <BR><BR> cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInvalidValue, cudaErrorInitializationError, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
+| cudaError_t cudaEventQuery (cudaEvent_t event) | Queries an event's status. <BR><BR> cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
+| cudaError_t cudaEventRecord (cudaEvent_t event, cudaStream_t stream) | Records an event. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
+| cudaError_t cudaEventSynchronize (cudaEvent_t event) | Waits for an event to complete. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle, cudaErrorLaunchFailure |
 
 ## CUDA Execution Control
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaConfigureCall (dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream) | Configure a device-launch. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidConfiguration |
-| cudaError_t cudaSetupArgument (const void *arg, size_t size, size_t offset) | Configure a device launch. <BR> cudaError_t = cudaSuccess |
-| cudaError_t cudaLaunch (const void *func) | Launches a device function. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDeviceFunction, cudaErrorInvalidConfiguration, cudaErrorLaunchFailure, cudaErrorLaunchTimeout, cudaErrorLaunchOutOfResources, cudaErrorSharedObjectInitFailed |
-| cudaError_t cudaFuncGetAttributes (cudaFuncAttributes *attr, const void *func) | Find out attributes for a given function. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidDeviceFunction |
-| cudaError_t cudaFuncSetCacheConfig (const void *func, cudaFuncCache cacheConfig) | Sets the preferred cache configuration for a device function. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidDeviceFunction |
-| cudaError_t cudaFuncSetSharedMemConfig (const void *func, cudaSharedMemConfig config) | Sets the shared memory configuration for a device function. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidDeviceFunction, cudaErrorInvalidValue |
-| cudaError_t cudaSetDoubleForDevice (double *d) | Converts a double argument to be executed on a device. <BR> cudaError_t = cudaSuccess |
-| cudaError_t cudaSetDoubleForHost (double *d) | Converts a double argument after execution on a device. <BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaConfigureCall (dim3 gridDim, dim3 blockDim, size_t sharedMem, cudaStream_t stream) | Configure a device-launch. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidConfiguration |
+| cudaError_t cudaSetupArgument (const void *arg, size_t size, size_t offset) | Configure a device launch. <BR><BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaLaunch (const void *func) | Launches a device function. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidDeviceFunction, cudaErrorInvalidConfiguration, cudaErrorLaunchFailure, cudaErrorLaunchTimeout, cudaErrorLaunchOutOfResources, cudaErrorSharedObjectInitFailed |
+| cudaError_t cudaFuncGetAttributes (cudaFuncAttributes *attr, const void *func) | Find out attributes for a given function. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidDeviceFunction |
+| cudaError_t cudaFuncSetCacheConfig (const void *func, cudaFuncCache cacheConfig) | Sets the preferred cache configuration for a device function. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidDeviceFunction |
+| cudaError_t cudaFuncSetSharedMemConfig (const void *func, cudaSharedMemConfig config) | Sets the shared memory configuration for a device function. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidDeviceFunction, cudaErrorInvalidValue |
+| cudaError_t cudaSetDoubleForDevice (double *d) | Converts a double argument to be executed on a device. <BR><BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaSetDoubleForHost (double *d) | Converts a double argument after execution on a device. <BR><BR> cudaError_t = cudaSuccess |
 
 ## CUDA Occupancy
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaOccupancyMaxActiveBlocksPerMultiprocessor (int *numBlocks, const void *func, int blockSize, size_t dynamicSMemSize) | Returns occupancy for a device function. <BR> cudaError_t = cudaSuccess, cudaErrorCudartUnloading, cudaErrorInitializationError, cudaErrorInvalidDevice, cudaErrorInvalidDeviceFunction, cudaErrorInvalidValue, cudaErrorUnknown |
+| cudaError_t cudaOccupancyMaxActiveBlocksPerMultiprocessor (int *numBlocks, const void *func, int blockSize, size_t dynamicSMemSize) | Returns occupancy for a device function. <BR><BR> cudaError_t = cudaSuccess, cudaErrorCudartUnloading, cudaErrorInitializationError, cudaErrorInvalidDevice, cudaErrorInvalidDeviceFunction, cudaErrorInvalidValue, cudaErrorUnknown |
 
 ## CUDA Memory Management
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaMemGetInfo (size_t *free, size_t *total) | Gets free and total device memory. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure |
-| cudaError_t cudaMalloc (void **devPtr, size_t size) | Allocate memory on the device. <BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
-| cudaError_t cudaFree (void *devPtr) | Frees memory on the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevicePointer, cudaErrorInitializationError |
-| cudaError_t cudaMallocArray (cudaArray_t *array, const cudaChannelFormatDesc *desc, size_t width, size_t height, unsigned int flags) | Allocate an array on the device. <BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation
-| cudaError_t cudaArrayGetInfo (cudaChannelFormatDesc *desc, cudaExtent *extent, unsigned int *flags, cudaArray_t array) | Gets info about the specified cudaArray. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaFreeArray (cudaArray_t array) | Frees an array on the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
-| cudaError_t cudaMalloc3D (cudaPitchedPtr *pitchedDevPtr, cudaExtent extent) | Allocates logical 1D, 2D, or 3D memory objects on the device. <BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
-| cudaError_t cudaMalloc3DArray (cudaArray_t *array, const cudaChannelFormatDesc *desc, cudaExtent extent, unsigned int flags) | Allocate an array on the device. <BR>
+| cudaError_t cudaMemGetInfo (size_t *free, size_t *total) | Gets free and total device memory. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError, cudaErrorInvalidValue, cudaErrorLaunchFailure |
+| cudaError_t cudaMalloc (void **devPtr, size_t size) | Allocate memory on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
+| cudaError_t cudaFree (void *devPtr) | Frees memory on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevicePointer, cudaErrorInitializationError |
+| cudaError_t cudaMallocArray (cudaArray_t *array, const cudaChannelFormatDesc *desc, size_t width, size_t height, unsigned int flags) | Allocate an array on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation
+| cudaError_t cudaArrayGetInfo (cudaChannelFormatDesc *desc, cudaExtent *extent, unsigned int *flags, cudaArray_t array) | Gets info about the specified cudaArray. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaFreeArray (cudaArray_t array) | Frees an array on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
+| cudaError_t cudaMalloc3D (cudaPitchedPtr *pitchedDevPtr, cudaExtent extent) | Allocates logical 1D, 2D, or 3D memory objects on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
+| cudaError_t cudaMalloc3DArray (cudaArray_t *array, const cudaChannelFormatDesc *desc, cudaExtent extent, unsigned int flags) | Allocate an array on the device. <BR><BR>
 	cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
-| cudaError_t cudaMallocHost (void **ptr, size_t size) | Allocates page-locked memory on the host. <BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
-| cudaError_t cudaMallocManaged (void **devPtr, size_t size, unsigned int flags) | Allocates memory that will be automatically managed by the Unified Memory system. <BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation cudaErrorNotSupported cudaErrorInvalidValue |
-| cudaError_t cudaHostAlloc (void **pHost, size_t size, unsigned int flags) | Allocates page-locked memory on the host. <BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
-| cudaError_t cudaFreeHost (void *ptr) | Frees page-locked memory. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError |
-| cudaError_t cudaMallocMipmappedArray (cudaMipmappedArray_t *mipmappedArray, const cudaChannelFormatDesc *desc, cudaExtent extent, unsigned int numLevels, unsigned int flags) | Allocate a mipmapped array on the device. <BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
-| cudaError_t cudaGetMipmappedArrayLevel (cudaArray_t *levelArray, cudaMipmappedArray_const_t mipmappedArray, unsigned int level) | Gets a mipmap level of a CUDA <BR> mipmapped array. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaFreeMipmappedArray (cudaMipmappedArray_t mipmappedArray) | Frees a mipmapped array on the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
-| cudaError_t cudaGetSymbolAddress (void **devPtr, const void *symbol) | Finds the address associated with a CUDA symbol. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidSymbol |
-| cudaError_t cudaGetSymbolSize (size_t *size, const void *symbol) | Finds the size of the object associated with a CUDA symbol. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidSymbol |
-| cudaError_t cudaHostGetDevicePointer (void **pDevice, void *pHost, unsigned int flags) | Passes back device pointer of mapped host memory allocated by cudaHostAlloc or registered by cudaHostRegister. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorMemoryAllocation |
-| cudaError_t cudaHostGetFlags (unsigned int *pFlags, void *pHost) | Passes back flags used to allocate pinned host memory allocated by cudaHostAlloc. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaHostRegister (void *ptr, size_t size, unsigned int flags) | Registers an existing host memory range for use by CUDA. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorMemoryAllocation |
-| cudaError_t cudaHostUnregister (void *ptr) | Unregisters a memory range that was registered with cudaHostRegister. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaMallocPitch (void **devPtr, size_t *pitch, size_t width, size_t height) | Allocates pitched memory on the device. <BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
-| cudaError_t cudaMemcpy (void *dst, const void *src, size_t count, cudaMemcpyKind kind) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy2D (void *dst, size_t dpitch, const void *src, size_t spitch, size_t width, size_t height, cudaMemcpyKind kind) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidPitchValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy2DArrayToArray (cudaArray_t dst, size_t wOffsetDst, size_t hOffsetDst, cudaArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, cudaMemcpyKind kind) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy2DAsync (void *dst, size_t dpitch, const void *src, size_t spitch, size_t width, size_t height, cudaMemcpyKind kind, cudaStream_t stream) | 	Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidPitchValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy2DFromArray (void *dst, size_t dpitch, cudaArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, cudaMemcpyKind kind) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy2DFromArrayAsync (void *dst, size_t dpitch, cudaArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, cudaMemcpyKind kind, cudaStream_t stream) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy2DToArray (cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, cudaMemcpyKind kind) | 	Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy2DToArrayAsync (cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, cudaMemcpyKind kind, cudaStream_t stream) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy3D (const cudaMemcpy3DParms *p) | Copies data between 3D objects. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy3DAsync (const cudaMemcpy3DParms *p, cudaStream_t stream) | Copies data between 3D objects. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpy3DPeer (const cudaMemcpy3DPeerParms *p) | Copies memory between devices. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
-| cudaError_t cudaMemcpy3DPeerAsync (const cudaMemcpy3DPeerParms *p, cudaStream_t stream) | Copies memory between devices asynchronously. <BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
-| cudaError_t cudaMemcpyArrayToArray (cudaArray_t dst, size_t wOffsetDst, size_t hOffsetDst, cudaArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t count, cudaMemcpyKind kind) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpyAsync (void *dst, const void *src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpyFromArray (void *dst, cudaArray_const_t src, size_t wOffset, size_t hOffset, size_t count, cudaMemcpyKind kind) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpyFromArrayAsync (void *dst, cudaArray_const_t src, size_t wOffset, size_t hOffset, size_t count, cudaMemcpyKind kind, cudaStream_t stream) | 	Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpyFromSymbol (void *dst, const void *symbol, size_t count, size_t offset, cudaMemcpyKind kind) | Copies data from the given symbol on the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidSymbol, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpyFromSymbolAsync (void *dst, const void *symbol, size_t count, size_t offset, cudaMemcpyKind kind, cudaStream_t stream) | Copies data from the given symbol on the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidSymbol, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpyPeer (void *dst, int dstDevice, const void *src, int srcDevice, size_t count) | Copies memory between two devices. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
-| cudaError_t cudaMemcpyPeerAsync (void *dst, int dstDevice, const void *src, int srcDevice, size_t count, cudaStream_t stream) | Copies memory between two devices asynchronously. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
-| cudaError_t cudaMemcpyToArray (cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t count, cudaMemcpyKind kind) | Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpyToArrayAsync (cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) | 	Copies data between host and device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpyToSymbol (const void *symbol, const void *src, size_t count, size_t offset, cudaMemcpyKind kind) | Copies data to the given symbol on the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidSymbol, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemcpyToSymbolAsync (const void *symbol, const void *src, size_t count, size_t offset, cudaMemcpyKind kind, cudaStream_t stream) | Copies data to the given symbol on the device. <BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidSymbol, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
-| cudaError_t cudaMemset (void *devPtr, int value, size_t count) | Initializes or sets device memory to a value. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
-| cudaError_t cudaMemset2D (void *devPtr, size_t pitch, int value, size_t width, size_t height) | Initializes or sets device memory to a value. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
-| cudaError_t cudaMemset2DAsync (void *devPtr, size_t pitch, int value, size_t width, size_t height, cudaStream_t stream) | Initializes or sets device memory to a value. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
-| cudaError_t cudaMemset3D (cudaPitchedPtr pitchedDevPtr, int value, cudaExtent extent) | Initializes or sets device memory to a value. <BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
-| cudaError_t cudaMemset3DAsync (cudaPitchedPtr pitchedDevPtr, int value, cudaExtent extent, cudaStream_t stream) | Initializes or sets device memory to a value. <BR>	cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
-| cudaError_t cudaMemsetAsync (void *devPtr, int value, size_t count, cudaStream_t stream) | Initializes or sets device memory to a value. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
+| cudaError_t cudaMallocHost (void **ptr, size_t size) | Allocates page-locked memory on the host. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
+| cudaError_t cudaMallocManaged (void **devPtr, size_t size, unsigned int flags) | Allocates memory that will be automatically managed by the Unified Memory system. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation cudaErrorNotSupported cudaErrorInvalidValue |
+| cudaError_t cudaHostAlloc (void **pHost, size_t size, unsigned int flags) | Allocates page-locked memory on the host. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
+| cudaError_t cudaFreeHost (void *ptr) | Frees page-locked memory. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInitializationError |
+| cudaError_t cudaMallocMipmappedArray (cudaMipmappedArray_t *mipmappedArray, const cudaChannelFormatDesc *desc, cudaExtent extent, unsigned int numLevels, unsigned int flags) | Allocate a mipmapped array on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
+| cudaError_t cudaGetMipmappedArrayLevel (cudaArray_t *levelArray, cudaMipmappedArray_const_t mipmappedArray, unsigned int level) | Gets a mipmap level of a CUDA <BR><BR> mipmapped array. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaFreeMipmappedArray (cudaMipmappedArray_t mipmappedArray) | Frees a mipmapped array on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
+| cudaError_t cudaGetSymbolAddress (void **devPtr, const void *symbol) | Finds the address associated with a CUDA symbol. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidSymbol |
+| cudaError_t cudaGetSymbolSize (size_t *size, const void *symbol) | Finds the size of the object associated with a CUDA symbol. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidSymbol |
+| cudaError_t cudaHostGetDevicePointer (void **pDevice, void *pHost, unsigned int flags) | Passes back device pointer of mapped host memory allocated by cudaHostAlloc or registered by cudaHostRegister. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorMemoryAllocation |
+| cudaError_t cudaHostGetFlags (unsigned int *pFlags, void *pHost) | Passes back flags used to allocate pinned host memory allocated by cudaHostAlloc. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaHostRegister (void *ptr, size_t size, unsigned int flags) | Registers an existing host memory range for use by CUDA. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorMemoryAllocation |
+| cudaError_t cudaHostUnregister (void *ptr) | Unregisters a memory range that was registered with cudaHostRegister. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaMallocPitch (void **devPtr, size_t *pitch, size_t width, size_t height) | Allocates pitched memory on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorMemoryAllocation |
+| cudaError_t cudaMemcpy (void *dst, const void *src, size_t count, cudaMemcpyKind kind) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy2D (void *dst, size_t dpitch, const void *src, size_t spitch, size_t width, size_t height, cudaMemcpyKind kind) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidPitchValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy2DArrayToArray (cudaArray_t dst, size_t wOffsetDst, size_t hOffsetDst, cudaArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t width, size_t height, cudaMemcpyKind kind) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy2DAsync (void *dst, size_t dpitch, const void *src, size_t spitch, size_t width, size_t height, cudaMemcpyKind kind, cudaStream_t stream) | 	Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidPitchValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy2DFromArray (void *dst, size_t dpitch, cudaArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, cudaMemcpyKind kind) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy2DFromArrayAsync (void *dst, size_t dpitch, cudaArray_const_t src, size_t wOffset, size_t hOffset, size_t width, size_t height, cudaMemcpyKind kind, cudaStream_t stream) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy2DToArray (cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, cudaMemcpyKind kind) | 	Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy2DToArrayAsync (cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t spitch, size_t width, size_t height, cudaMemcpyKind kind, cudaStream_t stream) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy3D (const cudaMemcpy3DParms *p) | Copies data between 3D objects. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy3DAsync (const cudaMemcpy3DParms *p, cudaStream_t stream) | Copies data between 3D objects. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidPitchValue, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpy3DPeer (const cudaMemcpy3DPeerParms *p) | Copies memory between devices. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaMemcpy3DPeerAsync (const cudaMemcpy3DPeerParms *p, cudaStream_t stream) | Copies memory between devices asynchronously. <BR><BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaMemcpyArrayToArray (cudaArray_t dst, size_t wOffsetDst, size_t hOffsetDst, cudaArray_const_t src, size_t wOffsetSrc, size_t hOffsetSrc, size_t count, cudaMemcpyKind kind) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpyAsync (void *dst, const void *src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpyFromArray (void *dst, cudaArray_const_t src, size_t wOffset, size_t hOffset, size_t count, cudaMemcpyKind kind) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpyFromArrayAsync (void *dst, cudaArray_const_t src, size_t wOffset, size_t hOffset, size_t count, cudaMemcpyKind kind, cudaStream_t stream) | 	Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpyFromSymbol (void *dst, const void *symbol, size_t count, size_t offset, cudaMemcpyKind kind) | Copies data from the given symbol on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidSymbol, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpyFromSymbolAsync (void *dst, const void *symbol, size_t count, size_t offset, cudaMemcpyKind kind, cudaStream_t stream) | Copies data from the given symbol on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidSymbol, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpyPeer (void *dst, int dstDevice, const void *src, int srcDevice, size_t count) | Copies memory between two devices. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaMemcpyPeerAsync (void *dst, int dstDevice, const void *src, int srcDevice, size_t count, cudaStream_t stream) | Copies memory between two devices asynchronously. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaMemcpyToArray (cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t count, cudaMemcpyKind kind) | Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpyToArrayAsync (cudaArray_t dst, size_t wOffset, size_t hOffset, const void *src, size_t count, cudaMemcpyKind kind, cudaStream_t stream) | 	Copies data between host and device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpyToSymbol (const void *symbol, const void *src, size_t count, size_t offset, cudaMemcpyKind kind) | Copies data to the given symbol on the device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidSymbol, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemcpyToSymbolAsync (const void *symbol, const void *src, size_t count, size_t offset, cudaMemcpyKind kind, cudaStream_t stream) | Copies data to the given symbol on the device. <BR><BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidSymbol, cudaErrorInvalidDevicePointer, cudaErrorInvalidMemcpyDirection |
+| cudaError_t cudaMemset (void *devPtr, int value, size_t count) | Initializes or sets device memory to a value. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
+| cudaError_t cudaMemset2D (void *devPtr, size_t pitch, int value, size_t width, size_t height) | Initializes or sets device memory to a value. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
+| cudaError_t cudaMemset2DAsync (void *devPtr, size_t pitch, int value, size_t width, size_t height, cudaStream_t stream) | Initializes or sets device memory to a value. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
+| cudaError_t cudaMemset3D (cudaPitchedPtr pitchedDevPtr, int value, cudaExtent extent) | Initializes or sets device memory to a value. <BR><BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
+| cudaError_t cudaMemset3DAsync (cudaPitchedPtr pitchedDevPtr, int value, cudaExtent extent, cudaStream_t stream) | Initializes or sets device memory to a value. <BR><BR>	cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
+| cudaError_t cudaMemsetAsync (void *devPtr, int value, size_t count, cudaStream_t stream) | Initializes or sets device memory to a value. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevicePointer |
 
 ## CUDA Unified Addressing
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaPointerGetAttributes (cudaPointerAttributes *attributes, const void *ptr) | Returns attributes about a specified pointer. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice cudaErrorInvalidValue |
+| cudaError_t cudaPointerGetAttributes (cudaPointerAttributes *attributes, const void *ptr) | Returns attributes about a specified pointer. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice cudaErrorInvalidValue |
 
 ## CUDA Peer Device Memory Access
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaDeviceCanAccessPeer (int *canAccessPeer, int device, int peerDevice) | Queries if a device may directly access a peer device's memory. <BR> 	cudaError_t = cudaSuccess, cudaErrorInvalidDevice |
-| cudaError_t cudaDeviceDisablePeerAccess (int peerDevice) | Disables direct access to memory allocations on a peer device. <BR> cudaError_t = cudaSuccess, cudaErrorPeerAccessNotEnabled, cudaErrorInvalidDevice |
-| cudaError_t cudaDeviceEnablePeerAccess (int peerDevice, unsigned int flags) | Enables direct access to memory allocations on a peer device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorPeerAccessAlreadyEnabled, cudaErrorInvalidValue |
+| cudaError_t cudaDeviceCanAccessPeer (int *canAccessPeer, int device, int peerDevice) | Queries if a device may directly access a peer device's memory. <BR><BR> 	cudaError_t = cudaSuccess, cudaErrorInvalidDevice |
+| cudaError_t cudaDeviceDisablePeerAccess (int peerDevice) | Disables direct access to memory allocations on a peer device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorPeerAccessNotEnabled, cudaErrorInvalidDevice |
+| cudaError_t cudaDeviceEnablePeerAccess (int peerDevice, unsigned int flags) | Enables direct access to memory allocations on a peer device. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorPeerAccessAlreadyEnabled, cudaErrorInvalidValue |
 
