@@ -1,6 +1,27 @@
-# CUDA Runtime 6.5
+# CUDA Runtime API 6.5
 
-## CUDA Error Types  
+Each CUDA Runtime function returns a cudaError_t which takes one of [CUDA Error Types][] values.
+
+CUDA Runtime functions are described in the following modules:
+
+* [CUDA Version Management][]
+* [CUDA Error Handling][]
+* [CUDA Profiler Control][]
+* [CUDA Device Management][]
+* [CUDA Stream Management][]
+* [CUDA Event Management][]
+* [CUDA Execution Control][]
+* [CUDA Occupancy][]
+* [CUDA Memory Management][]
+* [CUDA Unified Addressing][]
+* [CUDA Peer Device Memory Access][]
+
+NOTES:
+
+* there are others modules that describe OpenGL, Direct3D, Textures, Surfaces, ...
+* Go to [https://developer.nvidia.com/cuda-zone](https://developer.nvidia.com/cuda-zone) for more information.
+
+## CUDA Error Types ##
 
 | cudaError | value | Description |
 |:---|---:|---|
