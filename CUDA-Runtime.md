@@ -96,10 +96,10 @@
 
 | Function | Description |
 |---|---|
-| <pre> const __cudart_builtin__ char *cudaGetErrorName (cudaError_t error) </pre> | Returns the string representation of an error code enum name. |
-| <pre> const __cudart_builtin__ char *cudaGetErrorString (cudaError_t error) </pre> | Returns the description string for an error code. |
-| <pre> cudaError_t cudaGetLastError (void) </pre> | Returns the last error that has been produced by any of the runtime calls in the same host thread and resets it to cudaSuccess. |
-| <pre> cudaError_t cudaPeekAtLastError (void) </pre> | Returns the last error that has been produced by any of the runtime calls in the same host thread. <BR> Note that this call does not reset the error to cudaSuccess like cudaGetLastError(). |
+| const __cudart_builtin__ char *cudaGetErrorName (cudaError_t error) | Returns the string representation of an error code enum name. |
+| const __cudart_builtin__ char *cudaGetErrorString (cudaError_t error) | Returns the description string for an error code. |
+| cudaError_t cudaGetLastError (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread and resets it to cudaSuccess. |
+| cudaError_t cudaPeekAtLastError (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread. <BR> Note that this call does not reset the error to cudaSuccess like cudaGetLastError(). |
 
 ## CUDA Profiler Control
 
@@ -113,9 +113,35 @@
 
 | Function | Description |
 |---|---|
-| <pre> cudaError_t cudaGetDeviceCount (int *count) </pre> | Returns the number of compute-capable devices. <BR> cudaError_t = cudaSuccess, cudaErrorNoDevice, cudaErrorInsufficientDriver |
-| <pre> cudaError_t cudaDeviceGetAttribute (int *value, cudaDeviceAttr attr, int device) </pre> | Returns information about the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorInvalidValue |
+| cudaError_t cudaGetDeviceCount (int *count) | Returns the number of compute-capable devices. <BR> cudaError_t = cudaSuccess, cudaErrorNoDevice, cudaErrorInsufficientDriver |
+| cudaError_t cudaDeviceGetAttribute (int *value, cudaDeviceAttr attr, int device) | Returns information about the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorInvalidValue |
+| cudaError_t cudaSetDevice (int device) | Set device to be used for GPU executions. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorDeviceAlreadyInUse |
+| cudaError_t cudaSetDeviceFlags (unsigned int flags) | Sets flags to be used for device executions. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorSetOnActiveProcess |
+| cudaError_t cudaSetValidDevices (int *device_arr, int len) | Set a list of devices that can be used for CUDA. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaGetDeviceProperties (cudaDeviceProp *prop, int device) | Returns information about the compute-device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice |
+| cudaError_t cudaChooseDevice (int *device, const cudaDeviceProp *prop) | Select compute-device which best matches criteria. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaGetDevice (int *device) | Returns which device is currently being used. <BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaDeviceGetCacheConfig (cudaFuncCache *pCacheConfig) | Returns the preferred cache configuration for the current device. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError |
+| cudaError_t cudaDeviceSetCacheConfig (cudaFuncCache cacheConfig) | Sets the preferred cache configuration for the current device. <BR> cudaError_t = cudaSuccess, cudaErrorInitializationError |
+| cudaError_t cudaDeviceGetLimit (size_t *pValue, cudaLimit limit) | Returns resource limits. <BR> cudaError_t = cudaSuccess, cudaErrorUnsupportedLimit, cudaErrorInvalidValue |
+| cudaError_t cudaDeviceSetLimit (cudaLimit limit, size_t value) | Set resource limits. <BR> cudaError_t = cudaSuccess, cudaErrorUnsupportedLimit, cudaErrorInvalidValue, cudaErrorMemoryAllocation |
+| cudaError_t cudaDeviceGetPCIBusId (char *pciBusId, int len, int device) | Returns a PCI Bus Id string for the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaDeviceGetByPCIBusId (int *device, const char *pciBusId) | Returns a handle to a compute device. <BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidDevice |
+| cudaError_t cudaDeviceGetSharedMemConfig (cudaSharedMemConfig *pConfig) | Returns the shared memory configuration for the current device. <BR> cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
+| cudaError_t cudaDeviceSetSharedMemConfig (cudaSharedMemConfig config) | Sets the shared memory configuration for the current device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInitializationError |
+| cudaError_t cudaDeviceGetStreamPriorityRange (int *leastPriority, int *greatestPriority) | Returns numerical values that correspond to the least and greatest stream priorities. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaDeviceReset (void) | Destroy all allocations and reset all state on the current device in the current process. <BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaDeviceSynchronize (void) | Wait for compute device to finish. <BR> cudaError_t = cudaSuccess |
+| cudaError_t cudaIpcOpenEventHandle (cudaEvent_t *event, cudaIpcEventHandle_t handle) | Opens an interprocess event handle for use in the current process. <BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaIpcGetEventHandle (cudaIpcEventHandle_t *handle, cudaEvent_t event) | Gets an interprocess handle for a previously allocated event. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorMemoryAllocation, cudaErrorMapBufferObjectFailed |
+| cudaError_t cudaIpcOpenMemHandle (void **devPtr, cudaIpcMemHandle_t handle, unsigned int flags) | Opens an interprocess memory handle exported from another process and returns a device pointer usable in the local process. <BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle, cudaErrorTooManyPeers |
+| cudaError_t cudaIpcGetMemHandle (cudaIpcMemHandle_t *handle, void *devPtr) | Gets an interprocess memory handle for an existing device memory allocation. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorMemoryAllocation, cudaErrorMapBufferObjectFailed |
+| cudaError_t cudaIpcCloseMemHandle (void *devPtr) | Close memory mapped with cudaIpcOpenMemHandle. <BR> cudaError_t = cudaSuccess, cudaErrorMapBufferObjectFailed, cudaErrorInvalidResourceHandle |
 
+## CUDA Stream Management
+
+| Function | Description |
+|---|---|
 
 
 
