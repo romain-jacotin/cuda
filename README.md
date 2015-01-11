@@ -28,7 +28,6 @@
 
 Need Compute Capability >= 3.5
 
-
 ## Multi-Device System
 ### Peer-to-Peer
 

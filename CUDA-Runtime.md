@@ -1,6 +1,6 @@
 # CUDA Runtime 6.5
 
-## CUDA error types  
+## CUDA Error Types  
 
 | cudaError | value | Description |
 |:---|---:|---|
@@ -142,6 +142,20 @@
 
 | Function | Description |
 |---|---|
+| cudaError_t cudaStreamAddCallback (cudaStream_t stream, cudaStreamCallback_t callback, void *userData, unsigned int flags) | Add a callback to a compute stream. <BR> 	cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle, cudaErrorNotSupported |
+| cudaError_t cudaStreamAttachMemAsync (cudaStream_t stream, void *devPtr, size_t length, unsigned int flags) |	Attach memory to a stream asynchronously. <BR> 	cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInvalidValue cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamCreate (cudaStream_t *pStream) | Create an asynchronous stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaStreamCreateWithFlags (cudaStream_t *pStream, unsigned int flags) | Create an asynchronous stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaStreamCreateWithPriority (cudaStream_t *pStream, unsigned int flags, int priority) | Create an asynchronous stream with the specified priority. <BR> 	cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t cudaStreamGetFlags (cudaStream_t hStream, unsigned int *flags) | Query the flags of a stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamGetPriority (cudaStream_t hStream, int *priority) | Query the priority of a stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamQuery (cudaStream_t stream) | Queries an asynchronous stream for completion status. <BR> cudaError_t = cudaSuccess, cudaErrorNotReady, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamSynchronize (cudaStream_t stream) | Waits for stream tasks to complete. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamWaitEvent (cudaStream_t stream, cudaEvent_t event, unsigned int flags) | Make a compute stream wait on an event. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
+| cudaError_t cudaStreamDestroy (cudaStream_t stream) | Destroys and cleans up an asynchronous stream. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidResourceHandle |
+
+
+
 
 
 
