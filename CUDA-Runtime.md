@@ -89,17 +89,17 @@
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaDriverGetVersion (int *driverVersion) | Returns the CUDA driver version. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
-| cudaError_t cudaRuntimeGetVersion (int *runtimeVersion) | Returns the CUDA Runtime version. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t <B>cudaDriverGetVersion</B>(int *driverVersion) | Returns the CUDA driver version. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
+| cudaError_t <B>cudaRuntimeGetVersion</B>(int *runtimeVersion) | Returns the CUDA Runtime version. <BR><BR> cudaError_t = cudaSuccess, cudaErrorInvalidValue |
 
 ## CUDA Error Handling
 
 | Function | Description |
 |---|---|
-| const __cudart_builtin__ char *cudaGetErrorName (cudaError_t error) | Returns the string representation of an error code enum name. |
-| const __cudart_builtin__ char *cudaGetErrorString (cudaError_t error) | Returns the description string for an error code. |
-| cudaError_t cudaGetLastError (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread and resets it to cudaSuccess. |
-| cudaError_t cudaPeekAtLastError (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread. <BR><BR> Note that this call does not reset the error to cudaSuccess like cudaGetLastError(). |
+| const __cudart_builtin__ char *<B>cudaGetErrorName</B> (cudaError_t error) | Returns the string representation of an error code enum name. |
+| const __cudart_builtin__ char *<B>cudaGetErrorString</B> (cudaError_t error) | Returns the description string for an error code. |
+| cudaError_t <B>cudaGetLastError</B (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread and resets it to cudaSuccess. |
+| cudaError_t <B>cudaPeekAtLastError</B> (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread. <BR><BR> Note that this call does not reset the error to cudaSuccess like cudaGetLastError(). |
 
 ## CUDA Profiler Control
 
