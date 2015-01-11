@@ -113,8 +113,8 @@
 
 | Function | Description |
 |---|---|
-| cudaError_t cudaGetDeviceCount (int *count) | Returns the number of compute-capable devices. <BR> cudaError_t = cudaSuccess, cudaErrorNoDevice, cudaErrorInsufficientDriver |
-| cudaError_t cudaDeviceGetAttribute (int *value, cudaDeviceAttr attr, int device) | Returns information about the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorInvalidValue <BR> 
+| <code> cudaError_t cudaGetDeviceCount (int *count) </code> | Returns the number of compute-capable devices. <BR> cudaError_t = cudaSuccess, cudaErrorNoDevice, cudaErrorInsufficientDriver |
+| <code> cudaError_t cudaDeviceGetAttribute (int *value, cudaDeviceAttr attr, int device) </code> | Returns information about the device. <BR> cudaError_t = cudaSuccess, cudaErrorInvalidDevice, cudaErrorInvalidValue <BR> 
 		cudaDevAttrMaxThreadsPerBlock: Maximum number of threads per block;
 		cudaDevAttrMaxBlockDimX: Maximum x-dimension of a block;
 		cudaDevAttrMaxBlockDimY: Maximum y-dimension of a block;
