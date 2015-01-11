@@ -96,10 +96,10 @@
 
 | Function | Description |
 |---|---|
-| const __cudart_builtin__ char *cudaGetErrorName (cudaError_t error) | Returns the string representation of an error code enum name. |
-| const __cudart_builtin__ char *cudaGetErrorString (cudaError_t error) | Returns the description string for an error code. |
-| cudaError_t cudaGetLastError (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread and resets it to cudaSuccess. |
-| cudaError_t cudaPeekAtLastError (void) | Returns the last error that has been produced by any of the runtime calls in the same host thread. <BR> Note that this call does not reset the error to cudaSuccess like cudaGetLastError(). |
+| <pre> const __cudart_builtin__ char *cudaGetErrorName (cudaError_t error) </pre> | Returns the string representation of an error code enum name. |
+| <pre> const __cudart_builtin__ char *cudaGetErrorString (cudaError_t error) </pre> | Returns the description string for an error code. |
+| <pre> cudaError_t cudaGetLastError (void) </pre> | Returns the last error that has been produced by any of the runtime calls in the same host thread and resets it to cudaSuccess. |
+| <pre> cudaError_t cudaPeekAtLastError (void) </pre> | Returns the last error that has been produced by any of the runtime calls in the same host thread. <BR> Note that this call does not reset the error to cudaSuccess like cudaGetLastError(). |
 
 ## CUDA Profiler Control
 
