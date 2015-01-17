@@ -70,7 +70,33 @@ A multiprocessor is designed to execute hundreds of threads concurrently. To man
 ### <A name="terminology"></A> Terminology
 
 * __HOST__: The CPU and its memory (Host Memory)
+
 * __DEVICE__: The GPU and its memory (Device Memory)
+
+* __COMPUTE CAPABILITY__:  The compute capability of a device is represented by a version number, also sometimes called its "SM version". This version number identifies the features supported by the GPU hardware and is used by applications at runtime to determine which hardware features and/or instructions are available on the present GPU.
+    * The compute capability version comprises a major and a minor version number (x.y):
+        * Devices with the same major revision number are of the same core architecture:
+            * 1 = __Telsa__ architecture
+            * 2 = __Fermi__ architecture
+            * 3 = __Kepler__ architecture
+            * 5 = __Maxwell__ architecture
+        * The minor revision number corresponds to an incremental improvement to the core architecture, possibly including new features.
+
+Notes:
+
+* _The compute capability version of a particular GPU should not be confused with the CUDA version (e.g., CUDA 5.5, CUDA 6, CUDA 6.5, CUDA 7.0), which is the version of the CUDA software platform._
+* _The Tesla architecture (Compute Capability 1.x) is no longer supported starting with CUDA 7.0._
+
+| Architecture specifications  Compute capability (version) | 1.0 | 1.1 | 1.2 | 1.3 | 2.0 | 2.1 | 3.0 | 3.5 | 5.0 |5.2 |
+|--|--|--|--|--|--|--|--|--|--|--| 
+| _Number of cores for integer and floating-point arithmetic functions operations_ | 8 | 8 | 8 | 8 | 32 | 48 | 192 | 192 | 128 | 128 |
+
+Examples:
+
+* MacBook Pro 15' with NVIDIA GeForce GT 750M 2 Giga = (two Kepler multiprocessors with Compute Capability 3.0)
+    * __384 cores with 2 GB__
+* NVIDIA Tesla GPU Accelerator K40
+    * __2.880 cores with 12 GB__
 
 ----------------------------
 
@@ -173,7 +199,16 @@ CUDA threads may access data from multiple memory spaces during their execution:
 #### <A name="events"></A> Events
 ### <A name="dynamicparallelism"></A> Dynamic Parallelism
 
-Need Compute Capability >= 3.5
+Dynamic Parallelism enables a CUDA kernel to create and synchronize new nested work, using the CUDA runtime API to launch other kernels, optionally
+synchronize on kernel completion, perform device memory management, and create and use streams and events, all without CPU involvement. 
+
+__Note: Need Compute Capability >= 3.5__
+
+![Dynamic Parallelism](./images/dynamic_parallelism.jpg "Dynamic Parallelism")
+
+Dynamic Parallelism dynamically spawns new threads by adapting to the data without going back to the CPU, greatly simplifying GPU programming and accelerating  algorithms.
+
+![Dynamic Parallelism](./images/dynamic_parallelism_example.jpg "Dynamic Parallelism")
 
 ----------------------------
 
