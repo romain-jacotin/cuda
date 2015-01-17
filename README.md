@@ -92,12 +92,10 @@ Notes:
 |---|---|---|---|---|---|---|---|---|---|---| 
 | _Number of cores for integer and floating-point arithmetic functions operations_ | 8 | 8 | 8 | 8 | 32 | 48 | 192 | 192 | 128 | 128 |
 
-Examples:
-
-* MacBook Pro 15' with NVIDIA GeForce GT 750M 2 Giga = (two Kepler multiprocessors with Compute Capability 3.0)
-    * __384 cores with 2 GB__
-* NVIDIA Tesla GPU Accelerator K40
-    * __2.880 cores with 12 GB__
+|   |   |
+|---|---|
+| ![MacBook Pro](./images/macbookpro.jpg "MacBook Pro") | MacBook Pro 15' with NVIDIA GeForce GT 750M 2 Giga <BR> (two Kepler multiprocessors with Compute Capability 3.0) <BR><BR> __384 cores with 2 GB__ |
+| ![Tesla K40](./images/tesla_k40.png "Tesla K40") | NVIDIA Tesla GPU Accelerator K40 <BR><BR> __2.880 cores with 12 GB__ |
 
 ----------------------------
 
