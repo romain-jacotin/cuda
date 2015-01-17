@@ -49,6 +49,14 @@ This document is just a high level overview of CUDA features and CUDA programmin
     * [Stream and Event Behavior](#streamandeventbehavior)
     * [Peer-to-peer](#peertopeer)
 * [Versioning and Compatibility](#versioningandcompatibility)
+* [Parallel Libraries](#parallellibraries)
+    * [cuBLAS](#cublas)
+    * [cuSPARSE](#cusparse)
+    * [cuSOLVER](#cusolver)
+    * [cuFFT](#cufft)
+    * [cuRAND](#curand)
+    * [cuDNN](#dnn)
+    * [NPP](#npp)
 
 ----------------------------
 
@@ -111,9 +119,15 @@ There is 3 memory types inside the GPU Device:
 
 #### <A name="localmemory"></A> Local Memory
 
-Each thread owns its personal **local memory**. It is stored for kernel's parameters and kernel variables associated with the thread.
+Every thread owns its personal local memory for storing kernel's parameters and kernel variables associated (**per-thread local memory**).
+
+Local memory is so named because its scope is local to the thread, not because of its physical location. In fact, local memory is off-chip. Hence, access to local memory is as expensive as access to global memory. In other words, the term local in the name does not imply faster access. Local memory is used only to hold automatic variables.
 
 #### <A name="sharedmemory"></A> Shared Memory
+
+If desired, every thread block can use allocate a specific amount of shared memory for storing variables that will be accessed very often by the thread block. All the threads inside the same block can access to this shared memory (**per-block shared memory**).
+
+Because it is on-chip, shared memory has much higher bandwidth and lower latency than local and global memory.
 
 #### <A name="globalmemory"></A> Global Memory
 
@@ -175,3 +189,62 @@ A host system can have multiple GPU Devices.
 * All plug-ins and libraries used by an application must use the same version of:
     * any CUDA libraries (such as cuFFT, cuBLAS, ...)
     * the associated CUDA runtime.
+
+----------------------------
+
+## <A name"parallellibraries"></A> Parallel Libraries
+
+### <A name="cublas"></A> cuBLAS
+
+The cuBLAS library is an implementation of BLAS (Basic Linear Algebra Subprograms) on top of the CUDA runtime. It allows the user to access the computational resources of NVIDIA Graphics Processing Unit (GPU).
+
+### <A name="cusparse"></A> cuSPARSE
+
+The cuSPARSE library contains a set of basic linear algebra subroutines used for handling sparse matrices. The library routines can be classified into four categories:
+
+* Level 1: operations between a vector in sparse format and a vector in dense format
+* Level 2: operations between a matrix in sparse format and a vector in dense format
+* Level 3: operations between a matrix in sparse format and a set of vectors in dense format (which can also usually be viewed as a dense tall matrix)
+* Conversion: operations that allow conversion between different matrix formats
+
+### <A name="cusolver"></A> cuSOLVER
+
+The cuSolver library is a high-level package based on the cuBLAS and cuSPARSE libraries. It combines three separate libraries under a single umbrella, each of which can be used independently or in concert with other toolkit libraries.
+The intent of cuSolver is to provide useful LAPACK-like features, such as common matrix factorization and triangular solve routines for dense matrices, a sparse least-squares solver and an eigenvalue solver. In addition cuSolver provides a new refactorization library useful for solving sequences of matrices with a shared sparsity pattern.
+
+* The first part of cuSolver is called __cuSolverDN__, and deals with dense matrix factorization and solve routines such as LU, QR, SVD and LDLT, as well as useful utilities such as matrix and vector permutations.
+* Next, __cuSolverSP__ provides a new set of sparse routines based on a sparse QR factorization. Not all matrices have a good sparsity pattern for parallelism in factorization, so the cuSolverSP library also provides a CPU path to handle those sequential-like matrices. For those matrices with abundant parallelism, the GPU path will deliver higher performance. The library is designed to be called from C and C++.
+* The final part is __cuSolverRF__, a sparse re-factorization package that can provide very good performance when solving a sequence of matrices where only the coefficients are changed but the sparsity pattern remains the same.
+
+### <A name="cufft"></A> cuFFT
+
+The FFT is a divide-and-conquer algorithm for efficiently computing discrete Fourier transforms of complex or real-valued data sets. It is one of the most important and widely used numerical algorithms in computational physics and general signal processing.
+
+### <A name="curand"></A> cuRAND
+
+The cuRAND library provides facilities that focus on the simple and efficient generation of high-quality pseudorandom and quasirandom numbers. A pseudorandom sequence of numbers satisfies most of the statistical properties of a truly random sequence but is generated by a deterministic algorithm. A quasirandom sequence of n -dimensional points is generated by a deterministic algorithm designed to fill an n -dimensional space evenly.
+
+Random numbers can be generated on the device or on the host CPU.
+
+### <A name="cudnn"></A> cuDNN (Deep Neural Network)
+
+![cuDNN](./images/cudnn.png "cuDNN")
+
+cuDNN is a GPU-accelerated library of primitives for deep neural networks. It provides highly tuned implementations of routines arising frequently in DNN applications:
+
+* Convolution forward and backward, including cross-correlation
+* Pooling forward and backward
+* Softmax forward and backward
+* Neuron activations forward and backward:
+    * Rectified linear (ReLU)
+    * Sigmoid
+    * Hyperbolic tangent (TANH)
+* Tensor transformation functions
+
+### <A name="npp"></A> NPP
+
+NVIDIA Performance Primitive (NPP) is a library of functions for performing CUDA accelerated processing. The initial set of
+functionality in the library focuses on imaging and video processing and is widely applicable for developers
+in these areas. NPP will evolve over time to encompass more of the compute heavy tasks in a variety of
+problem domains. The NPP library is written to maximize flexibility, while maintaining high performance.
+
