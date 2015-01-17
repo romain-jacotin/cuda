@@ -22,6 +22,7 @@ This document is just a high level overview of CUDA features and CUDA programmin
 * [Introduction](#introduction)
     * [Terminology](#terminology)
     * [CUDA Software Architecture](#cudasoftwarearchitecture)
+    * [Versioning and Compatibility](#versioningandcompatibility)
     * [CUDA Libraries](#parallellibraries)
         * [cuBLAS](#cublas)
         * [cuSPARSE](#cusparse)
@@ -55,7 +56,6 @@ This document is just a high level overview of CUDA features and CUDA programmin
 * [Multi-Device System](#multidevicesystem)
     * [Stream and Event Behavior](#streamandeventbehavior)
     * [GPU Direct](#gpudirect)
-* [Versioning and Compatibility](#versioningandcompatibility)
 
 ----------------------------
 
@@ -111,6 +111,20 @@ These APIs are mutually exclusive: An application should use either one or the o
 
 * The CUDA runtime eases device code management by providing implicit initialization, context management, and module management.
 * In contrast, the CUDA driver API requires more code, is harder to program and debug, but offers a better level of control and is language-independent since it only deals with cubin objects. In particular, it is more difficult to configure and launch kernels using the CUDA driver API, since the execution configuration and kernel parameters must be specified with explicit function calls. Also, device emulation does not work with the CUDA driver API.
+
+### <A name="versioningandcompatibility"></A> Versioning and Compatibility
+
+![Versioning and Compatibility](./images/versioning_and_compatibility.png "Versioning and Compatibility")
+
+* __The driver API is backward compatible__, meaning that applications, plug-ins, and libraries (including the C runtime) compiled against a particular version of the driver API will continue to work on subsequent device driver releases.
+
+* __The driver API is not forward compatible__, which means that applications, plug-ins, and libraries (including the C runtime) compiled against a particular version of the driver API will not work on previous versions of the device driver.
+
+* Only one version of the CUDA device driver can be installed on a system.
+
+* All plug-ins and libraries used by an application must use the same version of:
+    * any CUDA libraries (such as cuFFT, cuBLAS, ...)
+    * the associated CUDA runtime.
 
 ### <A name"cudalibraries"></A> CUDA Libraries
 
@@ -406,21 +420,5 @@ Optimized pipeline for frame-based devices such as frame grabbers, video switche
 * GPU Direct RDMA enables RDMA transfers across an Infiniband network between GPUs in different cluster nodes, bypassing CPU host memory altogether. 
 
 Using GPUDirect, 3rd party network adapters, solid-state drives (SSDs) and other devices can directly read and write CUDA host and device memory. GPUDirect eliminates unnecessary system memory copies, dramatically lowers CPU overhead, and reduces latency, resulting in significant performance improvements in data transfer times for applications running on NVIDIA products.
-
-----------------------------
-
-## <A name="versioningandcompatibility"></A> Versioning and Compatibility
-
-![Versioning and Compatibility](./images/versioning_and_compatibility.png "Versioning and Compatibility")
-
-* __The driver API is backward compatible__, meaning that applications, plug-ins, and libraries (including the C runtime) compiled against a particular version of the driver API will continue to work on subsequent device driver releases.
-
-* __The driver API is not forward compatible__, which means that applications, plug-ins, and libraries (including the C runtime) compiled against a particular version of the driver API will not work on previous versions of the device driver.
-
-* Only one version of the CUDA device driver can be installed on a system.
-
-* All plug-ins and libraries used by an application must use the same version of:
-    * any CUDA libraries (such as cuFFT, cuBLAS, ...)
-    * the associated CUDA runtime.
 
 ----------------------------
