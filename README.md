@@ -88,8 +88,8 @@ Notes:
 * _The compute capability version of a particular GPU should not be confused with the CUDA version (e.g., CUDA 5.5, CUDA 6, CUDA 6.5, CUDA 7.0), which is the version of the CUDA software platform._
 * _The Tesla architecture (Compute Capability 1.x) is no longer supported starting with CUDA 7.0._
 
-| Architecture specifications  Compute capability (version) | 1.0 | 1.1 | 1.2 | 1.3 | 2.0 | 2.1 | 3.0 | 3.5 | 5.0 |5.2 |
-|--|--|--|--|--|--|--|--|--|--|--| 
+| Architecture specifications  Compute capability (version) | 1.0 | 1.1 | 1.2 | 1.3 | 2.0 | 2.1 | 3.0 | 3.5 | 5.0 | 5.2 |
+|---|---|---|---|---|---|---|---|---|---|---| 
 | _Number of cores for integer and floating-point arithmetic functions operations_ | 8 | 8 | 8 | 8 | 32 | 48 | 192 | 192 | 128 | 128 |
 
 Examples:
