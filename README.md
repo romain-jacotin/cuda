@@ -21,6 +21,15 @@ This document is just a high level overview of CUDA features and CUDA programmin
 
 * [Introduction](#introduction)
     * [Terminology](#terminology)
+    * [CUDA Software Architecture](#cudasoftwarearchitecture)
+    * [CUDA Libraries](#parallellibraries)
+        * [cuBLAS](#cublas)
+        * [cuSPARSE](#cusparse)
+        * [cuSOLVER](#cusolver)
+        * [cuFFT](#cufft)
+        * [cuRAND](#curand)
+        * [cuDNN](#dnn)
+        * [NPP](#npp)
 * [Thread Hierarchy](#threadhierarchy)
     * [Kernel](#kernel)
     * [Thread](#thread)
@@ -47,14 +56,6 @@ This document is just a high level overview of CUDA features and CUDA programmin
     * [Stream and Event Behavior](#streamandeventbehavior)
     * [GPU Direct](#gpudirect)
 * [Versioning and Compatibility](#versioningandcompatibility)
-* [Parallel Libraries](#parallellibraries)
-    * [cuBLAS](#cublas)
-    * [cuSPARSE](#cusparse)
-    * [cuSOLVER](#cusolver)
-    * [cuFFT](#cufft)
-    * [cuRAND](#curand)
-    * [cuDNN](#dnn)
-    * [NPP](#npp)
 
 ----------------------------
 
@@ -94,8 +95,138 @@ Notes:
 
 |   |   |
 |---|---|
-| ![MacBook Pro](./images/macbookpro.jpg "MacBook Pro") | MacBook Pro 15' with NVIDIA GeForce GT 750M 2 Giga <BR> (two Kepler multiprocessors with Compute Capability 3.0) <BR><BR> __384 cores with 2 GB__ |
+| ![MacBook Pro](./images/macbookpro.jpg "MacBook Pro") | MacBook Pro 15' <BR> NVIDIA GeForce GT 750M 2 Giga <BR><BR> __384 cores with 2 GB__ |
 | ![Tesla K40](./images/tesla_k40.png "Tesla K40") | NVIDIA Tesla GPU Accelerator K40 <BR><BR> __2.880 cores with 12 GB__ |
+
+### <A name="cudasoftwarearchitecture"></A> CUDA Software Architecture
+
+![CUDA Software Architecture](./images/cuda_design.jpg "CUDA Software Architecture")
+
+CUDA is composed of two APIs:
+
+* A low-level API called the __CUDA Driver API__,
+* A higher-level API called the __CUDA Runtime API__ that is implemented on top of the CUDA driver API.
+
+These APIs are mutually exclusive: An application should use either one or the other.
+
+* The CUDA runtime eases device code management by providing implicit initialization, context management, and module management.
+* In contrast, the CUDA driver API requires more code, is harder to program and debug, but offers a better level of control and is language-independent since it only deals with cubin objects. In particular, it is more difficult to configure and launch kernels using the CUDA driver API, since the execution configuration and kernel parameters must be specified with explicit function calls. Also, device emulation does not work with the CUDA driver API.
+
+### <A name"cudalibraries"></A> CUDA Libraries
+
+#### <A name="cublas"></A> cuBLAS (Basic Linear Algebra Subroutines)
+
+The NVIDIA CUDA Basic Linear Algebra Subroutines (cuBLAS) library is a GPU-accelerated version of the complete standard BLAS library.
+      
+* Complete support for all 152 standard BLAS routines
+* Single, double, complex, and double complex data types
+* Support for CUDA streams
+* Fortran bindings
+* Support for multiple GPUs and concurrent kernels
+* Batched GEMM API
+* Device API that can be called from CUDA kernels
+* Batched LU factorization API
+* Batched matrix inverse API
+* New implementation of TRSV (Triangular solve), up to 7x faster than previous implementation.
+
+![cublas](./images/cublas.jpg "cublas")
+
+_To learn more about cuBLAS:_ [https://developer.nvidia.com/cuBLAS](https://developer.nvidia.com/cuBLAS)
+
+#### <A name="cusparse"></A> cuSPARSE (Sparse Matrix)
+
+The NVIDIA CUDA Sparse Matrix library (cuSPARSE) provides a collection of basic linear algebra subroutines used for sparse matrices that delivers up to 8x faster performance than the latest MKL. The latest release includes a sparse triangular solver.
+
+Supports dense, COO, CSR, CSC, ELL/HYB and Blocked CSR sparse matrix formats
+Level 1 routines for sparse vector x dense vector operations
+Level 2 routines for sparse matrix x dense vector operations
+Level 3 routines for sparse matrix x multiple dense vectors (tall matrix)
+Routines for sparse matrix by sparse matrix addition and multiplication
+Conversion routines that allow conversion between different matrix formats
+Sparse Triangular Solve
+Tri-diagonal solver
+Incomplete factorization preconditioners ilu0 and ic0
+
+![cusparse](./images/cusparse.jpg "cusparse")
+
+_To learn more about cuSPARSE:_ [https://developer.nvidia.com/cuSPARSE](https://developer.nvidia.com/cuSPARSE)
+
+#### <A name="cusolver"></A> cuSOLVER (Solver)
+
+The NVIDIA cuSOLVER library provides a collection of dense and sparse direct solvers which deliver significant acceleration for Computer Vision, CFD, Computational Chemistry, and Linear Optimization applications.
+
+* __cusolverDN__: Key LAPACK dense solvers 3-6x faster than MKL.
+    * Dense Cholesky, LU, SVD, QR
+    * Applications include: optimization, Computer Vision, CFD
+* __cusolverSP__
+    * Sparse direct solvers & Eigensolvers
+    * Applications include: Newton's method, Chemical Kinetics
+* __cusolverRF__
+    * Sparse refactorization solver
+    * Applications include: Chemistry, ODEs, Circuit simulation
+
+_To learn more about cuSOLVER:_ [https://developer.nvidia.com/cuSOLVER](https://developer.nvidia.com/cuSOLVER)
+
+#### <A name="cufft"></A> cuFFT (Fast Fourier Transformation)
+
+The FFT is a divide-and-conquer algorithm for efficiently computing discrete Fourier transforms of complex or real-valued data sets. It is one of the most important and widely used numerical algorithms in computational physics and general signal processing.
+
+![cufft](./images/cufft.jpg "cuFFT")
+
+_To learn more about cuFFT:_ [https://developer.nvidia.com/cuFFT](https://developer.nvidia.com/cuFFT)
+
+#### <A name="curand"></A> cuRAND (Random Number)
+
+The cuRAND library provides facilities that focus on the simple and efficient generation of high-quality pseudorandom and quasirandom numbers. A pseudorandom sequence of numbers satisfies most of the statistical properties of a truly random sequence but is generated by a deterministic algorithm. A quasirandom sequence of n -dimensional points is generated by a deterministic algorithm designed to fill an n-dimensional space evenly.
+
+Random numbers can be generated on the device or on the host CPU.
+
+![cuRAND](./images/curand.jpg "cuRAND")
+
+_To learn more about cuRAND:_ [https://developer.nvidia.com/cuRAND](https://developer.nvidia.com/cuRAND)
+
+#### <A name="cudnn"></A> cuDNN (Deep Neural Network)
+
+![cuDNN](./images/cudnn.png "cuDNN")
+
+cuDNN is a GPU-accelerated library of primitives for deep neural networks. It provides highly tuned implementations of routines arising frequently in DNN applications:
+
+* Convolution forward and backward, including cross-correlation
+* Pooling forward and backward
+* Softmax forward and backward
+* Neuron activations forward and backward:
+    * Rectified linear (ReLU)
+    * Sigmoid
+    * Hyperbolic tangent (TANH)
+* Tensor transformation functions
+
+_To learn more about cuDNN:_ [https://developer.nvidia.com/cuDNN](https://developer.nvidia.com/cuDNN)
+
+#### <A name="npp"></A> NPP (NVIDIA Performance Primitive)
+
+NVIDIA Performance Primitive (NPP) is a library of functions for performing CUDA accelerated processing. The initial set of
+functionality in the library focuses on imaging and video processing and is widely applicable for developers
+in these areas. NPP will evolve over time to encompass more of the compute heavy tasks in a variety of problem domains.
+
+* __Eliminates unnecessary copying of data to/from CPU memory__
+    * Process data that is already in GPU memory
+    * Leave results in GPU memory so they are ready for subsequent processing
+* __Data Exchange and Initialization__
+    * Set, Convert, Copy, CopyConstBorder, Transpose, SwapChannels
+* __Arithmetic and Logical Operations__
+    * Add, Sub, Mul, Div, AbsDiff, Threshold, Compare
+* __Color Conversion__
+    * RGBToYCbCr, YcbCrToRGB, YCbCrToYCbCr, ColorTwist, LUT_Linear
+* __Filter Functions__
+    * FilterBox, Filter, FilterRow, FilterColumn, FilterMax, FilterMin, Dilate, Erode, SumWindowColumn, SumWindowRow
+* __JPEG__
+    * DCTQuantInv, DCTQuantFwd, QuantizationTableJPEG
+* __Geometry Transforms__
+    * Mirror, WarpAffine, WarpAffineBack, WarpAffineQuad, WarpPerspective, WarpPerspectiveBack  , WarpPerspectiveQuad, Resize
+* __Statistics Functions__
+    * Mean_StdDev, NormDiff, Sum, MinMax, HistogramEven, RectStdDev
+
+_To learn more about NPP:_ [https://developer.nvidia.com/NPP](https://developer.nvidia.com/NPP)
 
 ----------------------------
 
@@ -151,6 +282,17 @@ The GPU card contains its own DRAM memory separatly from the CPU's DRAM. Let's s
 
 ### <A name="hostmemory"></A> Host Memory
 #### <A name="pagelockedhostmemory"></A> Page-Locked Host Memory
+
+The CUDA runtime provides functions to allow the use of page-locked (also known as pinned) host memory (as opposed to regular pageable host memory):
+
+Using page-locked host memory has several benefits:
+
+* Copies between page-locked host memory and device memory can be performed concurrently with kernel execution for some devices.
+* On some devices, page-locked host memory can be mapped into the address space of the device, eliminating the need to copy it to or from device memory.
+* On systems with a front-side bus, bandwidth between host memory and device memory is higher if host memory is allocated as page-locked and even higher if in addition it is allocated as write-combining.
+
+![Pinned Memory](./images/pinned_memory.jpg "Pinned Memory")
+
 ### <A name="devicememory"></A> Device Memory
 
 CUDA threads may access data from multiple memory spaces during their execution:
@@ -282,119 +424,3 @@ Using GPUDirect, 3rd party network adapters, solid-state drives (SSDs) and other
     * the associated CUDA runtime.
 
 ----------------------------
-
-## <A name"parallellibraries"></A> Parallel Libraries
-
-### <A name="cublas"></A> cuBLAS (Basic Linear Algebra Subroutines)
-
-The NVIDIA CUDA Basic Linear Algebra Subroutines (cuBLAS) library is a GPU-accelerated version of the complete standard BLAS library.
-    	
-* Complete support for all 152 standard BLAS routines
-* Single, double, complex, and double complex data types
-* Support for CUDA streams
-* Fortran bindings
-* Support for multiple GPUs and concurrent kernels
-* Batched GEMM API
-* Device API that can be called from CUDA kernels
-* Batched LU factorization API
-* Batched matrix inverse API
-* New implementation of TRSV (Triangular solve), up to 7x faster than previous implementation.
-
-![cublas](./images/cublas.jpg "cublas")
-
-_To learn more about cuBLAS:_ [https://developer.nvidia.com/cuBLAS](https://developer.nvidia.com/cuBLAS)
-
-### <A name="cusparse"></A> cuSPARSE (Sparse Matrix)
-
-The NVIDIA CUDA Sparse Matrix library (cuSPARSE) provides a collection of basic linear algebra subroutines used for sparse matrices that delivers up to 8x faster performance than the latest MKL. The latest release includes a sparse triangular solver.
-
-Supports dense, COO, CSR, CSC, ELL/HYB and Blocked CSR sparse matrix formats
-Level 1 routines for sparse vector x dense vector operations
-Level 2 routines for sparse matrix x dense vector operations
-Level 3 routines for sparse matrix x multiple dense vectors (tall matrix)
-Routines for sparse matrix by sparse matrix addition and multiplication
-Conversion routines that allow conversion between different matrix formats
-Sparse Triangular Solve
-Tri-diagonal solver
-Incomplete factorization preconditioners ilu0 and ic0
-
-![cusparse](./images/cusparse.jpg "cusparse")
-
-_To learn more about cuSPARSE:_ [https://developer.nvidia.com/cuSPARSE](https://developer.nvidia.com/cuSPARSE)
-
-### <A name="cusolver"></A> cuSOLVER (Solver)
-
-The NVIDIA cuSOLVER library provides a collection of dense and sparse direct solvers which deliver significant acceleration for Computer Vision, CFD, Computational Chemistry, and Linear Optimization applications.
-
-* __cusolverDN__: Key LAPACK dense solvers 3-6x faster than MKL.
-    * Dense Cholesky, LU, SVD, QR
-    * Applications include: optimization, Computer Vision, CFD
-* __cusolverSP__
-    * Sparse direct solvers & Eigensolvers
-    * Applications include: Newton's method, Chemical Kinetics
-* __cusolverRF__
-    * Sparse refactorization solver
-    * Applications include: Chemistry, ODEs, Circuit simulation
-
-_To learn more about cuSOLVER:_ [https://developer.nvidia.com/cuSOLVER](https://developer.nvidia.com/cuSOLVER)
-
-### <A name="cufft"></A> cuFFT (Fast Fourier Transformation)
-
-The FFT is a divide-and-conquer algorithm for efficiently computing discrete Fourier transforms of complex or real-valued data sets. It is one of the most important and widely used numerical algorithms in computational physics and general signal processing.
-
-![cufft](./images/cufft.jpg "cuFFT")
-
-_To learn more about cuFFT:_ [https://developer.nvidia.com/cuFFT](https://developer.nvidia.com/cuFFT)
-
-### <A name="curand"></A> cuRAND (Random Number)
-
-The cuRAND library provides facilities that focus on the simple and efficient generation of high-quality pseudorandom and quasirandom numbers. A pseudorandom sequence of numbers satisfies most of the statistical properties of a truly random sequence but is generated by a deterministic algorithm. A quasirandom sequence of n -dimensional points is generated by a deterministic algorithm designed to fill an n-dimensional space evenly.
-
-Random numbers can be generated on the device or on the host CPU.
-
-![cuRAND](./images/curand.jpg "cuRAND")
-
-_To learn more about cuRAND:_ [https://developer.nvidia.com/cuRAND](https://developer.nvidia.com/cuRAND)
-
-### <A name="cudnn"></A> cuDNN (Deep Neural Network)
-
-![cuDNN](./images/cudnn.png "cuDNN")
-
-cuDNN is a GPU-accelerated library of primitives for deep neural networks. It provides highly tuned implementations of routines arising frequently in DNN applications:
-
-* Convolution forward and backward, including cross-correlation
-* Pooling forward and backward
-* Softmax forward and backward
-* Neuron activations forward and backward:
-    * Rectified linear (ReLU)
-    * Sigmoid
-    * Hyperbolic tangent (TANH)
-* Tensor transformation functions
-
-_To learn more about cuDNN:_ [https://developer.nvidia.com/cuDNN](https://developer.nvidia.com/cuDNN)
-
-### <A name="npp"></A> NPP (NVIDIA Performance Primitive)
-
-NVIDIA Performance Primitive (NPP) is a library of functions for performing CUDA accelerated processing. The initial set of
-functionality in the library focuses on imaging and video processing and is widely applicable for developers
-in these areas. NPP will evolve over time to encompass more of the compute heavy tasks in a variety of problem domains.
-
-* __Eliminates unnecessary copying of data to/from CPU memory__
-    * Process data that is already in GPU memory
-    * Leave results in GPU memory so they are ready for subsequent processing
-* __Data Exchange and Initialization__
-    * Set, Convert, Copy, CopyConstBorder, Transpose, SwapChannels
-* __Arithmetic and Logical Operations__
-    * Add, Sub, Mul, Div, AbsDiff, Threshold, Compare
-* __Color Conversion__
-    * RGBToYCbCr, YcbCrToRGB, YCbCrToYCbCr, ColorTwist, LUT_Linear
-* __Filter Functions__
-    * FilterBox, Filter, FilterRow, FilterColumn, FilterMax, FilterMin, Dilate, Erode, SumWindowColumn, SumWindowRow
-* __JPEG__
-    * DCTQuantInv, DCTQuantFwd, QuantizationTableJPEG
-* __Geometry Transforms__
-    * Mirror, WarpAffine, WarpAffineBack, WarpAffineQuad, WarpPerspective, WarpPerspectiveBack  , WarpPerspectiveQuad, Resize
-* __Statistics Functions__
-    * Mean_StdDev, NormDiff, Sum, MinMax, HistogramEven, RectStdDev
-
-_To learn more about NPP:_ [https://developer.nvidia.com/NPP](https://developer.nvidia.com/NPP)
