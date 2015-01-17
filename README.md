@@ -42,6 +42,7 @@ This document is just a high level overview of CUDA features and CUDA programmin
         * [Callbacks](#callbacks)
         * [Events](#events)
     * [Dynamic Parallelism](#dynamicparallelism)
+    * [Hyper-Q](#hyperq)
 * [Multi-Device System](#multidevicesystem)
     * [Stream and Event Behavior](#streamandeventbehavior)
     * [GPU Direct](#gpudirect)
@@ -127,22 +128,22 @@ The multiprocessor creates, manages, schedules, and executes threads in groups o
 | Technical Specifications per Compute Capability | 1.1 |  1.2 - 1.3 | 2.x | 3.0 - 3.2 | 3.5 | 3.7 | 5.0 | 5.2 |
 |---|---|---|---|---|---|---|---|---|
 | | | | | | | | | |
-| __Grid__ | | | | | | | | |
-| _Maximum dimensionality of grid of thread blocks_ | 2 | 2 | 3 | 3 | 3 | 3 | 3 | 3 |
-| _Maximum x-dimension of a grid of thread blocks_ | 65535 | 65535 | 65535 | 2^32 | 2^32 | 2^32 | 2^32 | 2^32 |
-| _Maximum y- or z-dimension of a grid of thread blocks_ | 65535 | 65535 | 65535 | 65535 | 65535 | 65535 | 65535 | 65535 |
+| __Grid of thread blocks__ | | | | | | | | |
+| _Maximum dimensionality of a grid_ | 2 | 2 | 3 | 3 | 3 | 3 | 3 | 3 |
+| _Maximum x-dimension of a grid_ | 65535 | 65535 | 65535 | 2^31-1 | 2^31-1 | 2^31-1 | 2^31-1 | 2^31-1 |
+| _Maximum y- or z-dimension of a grid_ | 65535 | 65535 | 65535 | 65535 | 65535 | 65535 | 65535 | 65535 |
 | | | | | | | | | |
-| __Block__ | | | | | | | | |
-| _Maximum dimensionality of thread block_ | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 |
+| __Thread Block__ | | | | | | | | |
+| _Maximum dimensionality of a block_ | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 |
 | _Maximum x- or y-dimension of a block_ | 512 | 512 | 1024 | 1024 | 1024 | 1024 | 1024 | 1024 |
 | _Maximum z-dimension of a block_ | 64 | 64 | 64 | 64 | 64 | 64 | 64 | 64 |
-| _Maximum number of threads per block_ | 512 | 512 | 1024 | 1024 | 1024 | 1024 | 1024 | 1024 |
+| _Maximum number of threads per block_ | 512 | 512 | 1024 | 1024 | 1 024 | 1.024 | 1 024 | 1024 |
 | | | | | | | | | |
-| __Multiprocessor__ | | | | | | | | |
+| __Per Multiprocessor__ | | | | | | | | |
 | _Warp size_ | 32 | 32 | 32 | 32 | 32 | 32 | 32 | 32 |
-| _Maximum number of resident blocks per multiprocessor_ | 8 | 8 | 8 | 16 | 16 | 16 | 32 | 32 |
-| _Maximum number of resident warps per multiprocessor_ | 24 | 32 | 48 | 64 | 64 | 64 | 64 | 64 |
-| _Maximum number of resident threads per multiprocessor_ | 768 | 1024 | 1536 | 2048 | 2048 | 2048 | 2048 | 2048 |
+| _Maximum number of resident blocks_ | 8 | 8 | 8 | 16 | 16 | 16 | 32 | 32 |
+| _Maximum number of resident warps_ | 24 | 32 | 48 | 64 | 64 | 64 | 64 | 64 |
+| _Maximum number of resident threads_ | 768 | 1024 | 1536 | 2048 | 2048 | 2048 | 2048 | 2048 |
 
 ----------------------------
 
@@ -209,6 +210,22 @@ __Note: Need Compute Capability >= 3.5__
 Dynamic Parallelism dynamically spawns new threads by adapting to the data without going back to the CPU, greatly simplifying GPU programming and accelerating  algorithms.
 
 ![Dynamic Parallelism](./images/dynamic_parallelism_example.jpg "Dynamic Parallelism")
+
+### <A name="hyperq"></A> Hyper-Q
+
+Hyper-Q enables multiple CPU threads or processes to launch work on a single GPU simultaneously,
+thereby dramatically increasing GPU utilization and slashing CPU idle times.
+This feature increases the total number of “connections” between the host and GPU by
+allowing 32 simultaneous, hardware-managed connections, compared to the single
+connection available with GPUs without Hyper-Q.
+Hyper-Q is a flexible solution that allows connections for both CUDA streams and Message
+Passing Interface (MPI) processes, or even threads from within a process. Existing
+applications that were previously limited by false dependencies can see a dramatic
+performance increase without changing any existing code.
+
+__Note: Need Compute Capability >= 3.5__
+
+![Hyper-Q](./images/hyperq.png "Hyper-Q")
 
 ----------------------------
 
