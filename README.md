@@ -111,6 +111,10 @@ These APIs are mutually exclusive: An application should use either one or the o
 * The CUDA runtime eases device code management by providing implicit initialization, context management, and module management.
 * In contrast, the CUDA driver API requires more code, is harder to program and debug, but offers a better level of control and is language-independent since it only deals with cubin objects. In particular, it is more difficult to configure and launch kernels using the CUDA driver API, since the execution configuration and kernel parameters must be specified with explicit function calls. Also, device emulation does not work with the CUDA driver API.
 
+The easiest way to write an application that use GPU acceleration is to use existing CUDA libraries if they correspond to your need: cuBLAS, cuRAND, cu FFT, cuSOLVER, cuDNN, ...
+
+But if existing libraries does not fit your need then you must write your own GPU functions in C language ( CUDA call them kernels, and CUDA C program have ".cu" file extension ) and use them in your application by using CUDA Runtime API, and linking CUDA Runtime library and home made kernels functions to your application.
+
 ### <A name="versioningandcompatibility"></A> Versioning and Compatibility
 
 ![Versioning and Compatibility](./images/versioning_and_compatibility.png "Versioning and Compatibility")
@@ -254,6 +258,12 @@ Calling a kernel function from the Host launch a grid of thread blocks on the De
 ![Heterogeneous Programming](./images/heterogeneous_programming.png "Heterogeneous Programming")
 
 ### <A name="kernel"></A> Kernel
+
+A kernel is a special C function defined using the `__global__` declaration specifier and the number of CUDA threads that execute that kernel for a given kernel call is specified using a new <<<...>>>execution configuration syntax. Each thread that executes the kernel is given a unique thread ID that is accessible within the kernel through the built-in threadIdx variable.
+
+```c
+// Kernel definition __global__ void VecAdd(float* A, float* B, float* C) { int i = threadIdx.x; C[i] = A[i] + B[i]; } int main() { ... // Kernel invocation with N threads VecAdd<<<1, N>>>(A, B, C); ... } - See more at: file:///Developer/NVIDIA/CUDA-7.0/doc/html/cuda-c-programming-guide/index.html#page-locked-host-memory
+```
 
 ![Thread Hierarchy](./images/grid_of_thread_blocks.png "Thread Hierarchy")
 
