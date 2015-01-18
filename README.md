@@ -39,7 +39,6 @@ This document is just a high level overview of CUDA features and CUDA programmin
     * [Grid](#grid)
 * [Memory](#memory)
     * [Host Memory](#hostmemory)
-        * [Page-Locked Host Memory](#pagelockedhostmemory)
     * [Device Memory](#devicememory)
     * [Unified Memory](#unifiedmemory)
 * [Asynchronous Concurrency Execution](#asynchronousconcurrencyexecution)
@@ -263,6 +262,8 @@ Calling a kernel function from the Host launch a grid of thread blocks on the De
 
 The multiprocessor creates, manages, schedules, and executes threads in groups of 32 parallel threads called warps. Individual threads composing a warp start together at the same program address, but they have their own instruction address counter and register state and are therefore free to branch and execute independently. The term warp originates from weaving, the first parallel thread technology.
 
+![Thread Divergence](./images/thread_divergence.png "Thread Divergence")
+
 ### <A name="block"></A> Block
 ### <A name="grid"></A> Grid
 
@@ -292,10 +293,17 @@ The multiprocessor creates, manages, schedules, and executes threads in groups o
 
 ## <A name="memory"></A> Memory
 
-The GPU card contains its own DRAM memory separatly from the CPU's DRAM. Let's see how these memory works and can exchange information between them.
+The GPU card contains its own DRAM memory separatly from the CPU's DRAM.
+
+![CUDA Compute Job](./images/cuda_compute_job.png "CUDA Compute Job")
+
+1. A typical CUDA compute job begins by copying data to the GPU, usually to global memory.
+2. The GPU then asynchronously runs the compute task it has been assigned.
+3. When the host makes a call to copy memory back to host memory, the call will block until all threads have completed and the data is available, at which point results are sent back.
 
 ### <A name="hostmemory"></A> Host Memory
-#### <A name="pagelockedhostmemory"></A> Page-Locked Host Memory
+
+* __Page-Locked Host Memory (Pinned Memory)__
 
 The CUDA runtime provides functions to allow the use of page-locked (also known as pinned) host memory (as opposed to regular pageable host memory):
 
