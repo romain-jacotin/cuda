@@ -23,14 +23,6 @@ This document is just a high level overview of CUDA features and CUDA programmin
     * [Terminology](#terminology)
     * [CUDA Software Architecture](#cudasoftwarearchitecture)
     * [Versioning and Compatibility](#versioningandcompatibility)
-    * [CUDA Libraries](#parallellibraries)
-        * [cuBLAS](#cublas)
-        * [cuSPARSE](#cusparse)
-        * [cuSOLVER](#cusolver)
-        * [cuFFT](#cufft)
-        * [cuRAND](#curand)
-        * [cuDNN](#dnn)
-        * [NPP](#npp)
 * [Thread Hierarchy](#threadhierarchy)
     * [Kernel](#kernel)
     * [Thread](#thread)
@@ -55,6 +47,14 @@ This document is just a high level overview of CUDA features and CUDA programmin
 * [Multi-Device System](#multidevicesystem)
     * [Stream and Event Behavior](#streamandeventbehavior)
     * [GPU Direct](#gpudirect)
+* [CUDA Libraries](#cudalibraries)
+    * [cuBLAS](#cublas)
+    * [cuSPARSE](#cusparse)
+    * [cuSOLVER](#cusolver)
+    * [cuFFT](#cufft)
+    * [cuRAND](#curand)
+    * [cuDNN](#cudnn)
+    * [NPP](#npp)
 
 ----------------------------
 
@@ -113,7 +113,7 @@ These APIs are mutually exclusive: An application should use either one or the o
 
 The easiest way to write an application that use GPU acceleration is to use existing CUDA libraries if they correspond to your need: cuBLAS, cuRAND, cu FFT, cuSOLVER, cuDNN, ...
 
-But if existing libraries does not fit your need then you must write your own GPU functions in C language ( CUDA call them kernels, and CUDA C program have ".cu" file extension ) and use them in your application by using CUDA Runtime API, and linking CUDA Runtime library and home made kernels functions to your application.
+If existing libraries do not fit your need then you must write your own GPU functions in C language ( CUDA call them kernels, and CUDA C program have ".cu" file extension ) and use them in your application by using CUDA Runtime API, and linking CUDA Runtime library and your kernels functions to your application.
 
 ### <A name="versioningandcompatibility"></A> Versioning and Compatibility
 
@@ -128,122 +128,6 @@ But if existing libraries does not fit your need then you must write your own GP
 * All plug-ins and libraries used by an application must use the same version of:
     * any CUDA libraries (such as cuFFT, cuBLAS, ...)
     * the associated CUDA runtime.
-
-### <A name"cudalibraries"></A> CUDA Libraries
-
-#### <A name="cublas"></A> cuBLAS (Basic Linear Algebra Subroutines)
-
-The NVIDIA CUDA Basic Linear Algebra Subroutines (cuBLAS) library is a GPU-accelerated version of the complete standard BLAS library.
-      
-* Complete support for all 152 standard BLAS routines
-* Single, double, complex, and double complex data types
-* Support for CUDA streams
-* Fortran bindings
-* Support for multiple GPUs and concurrent kernels
-* Batched GEMM API
-* Device API that can be called from CUDA kernels
-* Batched LU factorization API
-* Batched matrix inverse API
-* New implementation of TRSV (Triangular solve), up to 7x faster than previous implementation.
-
-![cublas](./images/cublas.jpg "cublas")
-
-_To learn more about cuBLAS:_ [https://developer.nvidia.com/cuBLAS](https://developer.nvidia.com/cuBLAS)
-
-#### <A name="cusparse"></A> cuSPARSE (Sparse Matrix)
-
-The NVIDIA CUDA Sparse Matrix library (cuSPARSE) provides a collection of basic linear algebra subroutines used for sparse matrices that delivers up to 8x faster performance than the latest MKL. The latest release includes a sparse triangular solver.
-
-Supports dense, COO, CSR, CSC, ELL/HYB and Blocked CSR sparse matrix formats
-Level 1 routines for sparse vector x dense vector operations
-Level 2 routines for sparse matrix x dense vector operations
-Level 3 routines for sparse matrix x multiple dense vectors (tall matrix)
-Routines for sparse matrix by sparse matrix addition and multiplication
-Conversion routines that allow conversion between different matrix formats
-Sparse Triangular Solve
-Tri-diagonal solver
-Incomplete factorization preconditioners ilu0 and ic0
-
-![cusparse](./images/cusparse.jpg "cusparse")
-
-_To learn more about cuSPARSE:_ [https://developer.nvidia.com/cuSPARSE](https://developer.nvidia.com/cuSPARSE)
-
-#### <A name="cusolver"></A> cuSOLVER (Solver)
-
-The NVIDIA cuSOLVER library provides a collection of dense and sparse direct solvers which deliver significant acceleration for Computer Vision, CFD, Computational Chemistry, and Linear Optimization applications.
-
-* __cusolverDN__: Key LAPACK dense solvers 3-6x faster than MKL.
-    * Dense Cholesky, LU, SVD, QR
-    * Applications include: optimization, Computer Vision, CFD
-* __cusolverSP__
-    * Sparse direct solvers & Eigensolvers
-    * Applications include: Newton's method, Chemical Kinetics
-* __cusolverRF__
-    * Sparse refactorization solver
-    * Applications include: Chemistry, ODEs, Circuit simulation
-
-_To learn more about cuSOLVER:_ [https://developer.nvidia.com/cuSOLVER](https://developer.nvidia.com/cuSOLVER)
-
-#### <A name="cufft"></A> cuFFT (Fast Fourier Transformation)
-
-The FFT is a divide-and-conquer algorithm for efficiently computing discrete Fourier transforms of complex or real-valued data sets. It is one of the most important and widely used numerical algorithms in computational physics and general signal processing.
-
-![cufft](./images/cufft.jpg "cuFFT")
-
-_To learn more about cuFFT:_ [https://developer.nvidia.com/cuFFT](https://developer.nvidia.com/cuFFT)
-
-#### <A name="curand"></A> cuRAND (Random Number)
-
-The cuRAND library provides facilities that focus on the simple and efficient generation of high-quality pseudorandom and quasirandom numbers. A pseudorandom sequence of numbers satisfies most of the statistical properties of a truly random sequence but is generated by a deterministic algorithm. A quasirandom sequence of n -dimensional points is generated by a deterministic algorithm designed to fill an n-dimensional space evenly.
-
-Random numbers can be generated on the device or on the host CPU.
-
-![cuRAND](./images/curand.jpg "cuRAND")
-
-_To learn more about cuRAND:_ [https://developer.nvidia.com/cuRAND](https://developer.nvidia.com/cuRAND)
-
-#### <A name="cudnn"></A> cuDNN (Deep Neural Network)
-
-![cuDNN](./images/cudnn.png "cuDNN")
-
-cuDNN is a GPU-accelerated library of primitives for deep neural networks. It provides highly tuned implementations of routines arising frequently in DNN applications:
-
-* Convolution forward and backward, including cross-correlation
-* Pooling forward and backward
-* Softmax forward and backward
-* Neuron activations forward and backward:
-    * Rectified linear (ReLU)
-    * Sigmoid
-    * Hyperbolic tangent (TANH)
-* Tensor transformation functions
-
-_To learn more about cuDNN:_ [https://developer.nvidia.com/cuDNN](https://developer.nvidia.com/cuDNN)
-
-#### <A name="npp"></A> NPP (NVIDIA Performance Primitive)
-
-NVIDIA Performance Primitive (NPP) is a library of functions for performing CUDA accelerated processing. The initial set of
-functionality in the library focuses on imaging and video processing and is widely applicable for developers
-in these areas. NPP will evolve over time to encompass more of the compute heavy tasks in a variety of problem domains.
-
-* __Eliminates unnecessary copying of data to/from CPU memory__
-    * Process data that is already in GPU memory
-    * Leave results in GPU memory so they are ready for subsequent processing
-* __Data Exchange and Initialization__
-    * Set, Convert, Copy, CopyConstBorder, Transpose, SwapChannels
-* __Arithmetic and Logical Operations__
-    * Add, Sub, Mul, Div, AbsDiff, Threshold, Compare
-* __Color Conversion__
-    * RGBToYCbCr, YcbCrToRGB, YCbCrToYCbCr, ColorTwist, LUT_Linear
-* __Filter Functions__
-    * FilterBox, Filter, FilterRow, FilterColumn, FilterMax, FilterMin, Dilate, Erode, SumWindowColumn, SumWindowRow
-* __JPEG__
-    * DCTQuantInv, DCTQuantFwd, QuantizationTableJPEG
-* __Geometry Transforms__
-    * Mirror, WarpAffine, WarpAffineBack, WarpAffineQuad, WarpPerspective, WarpPerspectiveBack  , WarpPerspectiveQuad, Resize
-* __Statistics Functions__
-    * Mean_StdDev, NormDiff, Sum, MinMax, HistogramEven, RectStdDev
-
-_To learn more about NPP:_ [https://developer.nvidia.com/NPP](https://developer.nvidia.com/NPP)
 
 ----------------------------
 
@@ -461,6 +345,30 @@ CUDA threads may access data from multiple memory spaces during their execution:
 ### <A name="concurrentdataaccess"></A> Concurrent Data Access
 #### <A name="synchronizefunctions"></A> Synchronize Functions
 #### <A name="atomicfunction"></A> Atomic Functions
+
+An atomic function performs a read-modify-write atomic operation on one 32-bit or 64-bit word residing in global or shared memory. For example, `atomicAdd()` reads a word at some address in global or shared memory, adds a number to it, and writes the result back to the same address. __The operation is atomic in the sense that it is guaranteed to be performed without interference from other threads: no other thread can access this address until the operation is complete__.
+
+* Atomic functions can only be used in device functions.
+* Atomic functions operating on mapped page-locked memory (Mapped Memory) are not atomic from the point of view of the host or other devices.
+
+| FUNCTION | DESCRIPTION |
+|---|---|
+| | |
+| __Arithmetic__ | |
+| atomicAdd | `int atomicAdd(int* address, int val)` <BR> `int atomicAdd(int* address, int val)` <BR> `unsigned int atomicAdd(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicAdd(unsigned long long int* address, unsigned long long int val)` <BR> `float atomicAdd(float* address, float val)` <BR><BR> Reads the 32-bit or 64-bit word old located at the address `address` in global or shared memory, computes `old + val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. The floating-point version of atomicAdd() is only supported by devices of compute capability 2.x and higher. |
+| atomicSub | `int atomicSub(int* address, int val)` <BR> `unsigned int atomicSub(unsigned int* address, unsigned int val)` <BR><BR> Reads the 32-bit word `old` located at the address `address` in global or shared memory, computes `old - val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicExch | `int atomicExch(int* address, int val)` <BR> `unsigned int atomicExch(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicExch(unsigned long long int* address, unsigned long long int val)` <BR> `float atomicExch(float* address, float val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory and stores `val` back to memory at the same address. These two operations are performed in one atomic transaction. The function returns `old`. |
+| atomicMin | `int atomicMin(int* address, int val)` <BR> `unsigned int atomicMin(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicMin(unsigned long long int* address, unsigned long long int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes the minimum of `old` and `val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. The 64-bit version of atomicMin() is only supported by devices of compute capability 3.5 and higher. |
+| atomicMax | `int atomicMax(int* address, int val)` <BR> `unsigned int atomicMax(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicMax(unsigned long long int* address, unsigned long long int val)` <BR><BR> Reads the 32-bit or 64-bit word old located at the address `address` in global or shared memory, computes the maximum of `old` and `val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. The 64-bit version of atomicMax() is only supported by devices of compute capability 3.5 and higher. |
+| atomicInc | `unsigned int atomicInc(unsigned int* address, unsigned int val)` <BR><BR> Reads the 32-bit word old located at the address `address` in global or shared memory, computes `(old >= val) ? 0 : (old+1)`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicDec | `unsigned int atomicDec(unsigned int* address, unsigned int val)` <BR><BR> Reads the 32-bit word `old` located at the address `address` in global or shared memory, computes `((old == 0) | (old > val)) ? val : (old-1)`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicCAS | `int atomicCAS(int* address, int compare, int val)` <BR> `unsigned int atomicCAS(unsigned int* address, unsigned int compare, unsigned int val)` <BR>`unsigned long long int atomicCAS(unsigned long long int* address, unsigned long long int compare, unsigned long long int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old == compare ? val : old` , and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old` (Compare And Swap). |
+| | |
+| __Bitwise__ | |
+| atomicAnd | `int atomicAnd(int* address, int val)`<BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old & val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicOr | `int atomicOr(int* address, int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old | val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicXor | `int atomicXor(int* address, int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old ^ val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+
 ### <A name="concurrentkernelexecution"></A> Concurrent kernel execution
 ### <A name="concurrentdatatransfers"></A> Concurrent Data Transfers
 ### <A name="streams"></A> Streams
@@ -536,3 +444,118 @@ Optimized pipeline for frame-based devices such as frame grabbers, video switche
 Using GPUDirect, 3rd party network adapters, solid-state drives (SSDs) and other devices can directly read and write CUDA host and device memory. GPUDirect eliminates unnecessary system memory copies, dramatically lowers CPU overhead, and reduces latency, resulting in significant performance improvements in data transfer times for applications running on NVIDIA products.
 
 ----------------------------
+## <A name="cudalibraries"></A> CUDA Libraries
+
+### <A name="cublas"></A> cuBLAS (Basic Linear Algebra Subroutines)
+
+The NVIDIA CUDA Basic Linear Algebra Subroutines (cuBLAS) library is a GPU-accelerated version of the complete standard BLAS library.
+      
+* Complete support for all 152 standard BLAS routines
+* Single, double, complex, and double complex data types
+* Support for CUDA streams
+* Fortran bindings
+* Support for multiple GPUs and concurrent kernels
+* Batched GEMM API
+* Device API that can be called from CUDA kernels
+* Batched LU factorization API
+* Batched matrix inverse API
+* New implementation of TRSV (Triangular solve), up to 7x faster than previous implementation.
+
+![cublas](./images/cublas.jpg "cublas")
+
+_To learn more about cuBLAS:_ [https://developer.nvidia.com/cuBLAS](https://developer.nvidia.com/cuBLAS)
+
+### <A name="cusparse"></A> cuSPARSE (Sparse Matrix)
+
+The NVIDIA CUDA Sparse Matrix library (cuSPARSE) provides a collection of basic linear algebra subroutines used for sparse matrices that delivers up to 8x faster performance than the latest MKL. The latest release includes a sparse triangular solver.
+
+Supports dense, COO, CSR, CSC, ELL/HYB and Blocked CSR sparse matrix formats
+Level 1 routines for sparse vector x dense vector operations
+Level 2 routines for sparse matrix x dense vector operations
+Level 3 routines for sparse matrix x multiple dense vectors (tall matrix)
+Routines for sparse matrix by sparse matrix addition and multiplication
+Conversion routines that allow conversion between different matrix formats
+Sparse Triangular Solve
+Tri-diagonal solver
+Incomplete factorization preconditioners ilu0 and ic0
+
+![cusparse](./images/cusparse.jpg "cusparse")
+
+_To learn more about cuSPARSE:_ [https://developer.nvidia.com/cuSPARSE](https://developer.nvidia.com/cuSPARSE)
+
+### <A name="cusolver"></A> cuSOLVER (Solver)
+
+The NVIDIA cuSOLVER library provides a collection of dense and sparse direct solvers which deliver significant acceleration for Computer Vision, CFD, Computational Chemistry, and Linear Optimization applications.
+
+* __cusolverDN__: Key LAPACK dense solvers 3-6x faster than MKL.
+    * Dense Cholesky, LU, SVD, QR
+    * Applications include: optimization, Computer Vision, CFD
+* __cusolverSP__
+    * Sparse direct solvers & Eigensolvers
+    * Applications include: Newton's method, Chemical Kinetics
+* __cusolverRF__
+    * Sparse refactorization solver
+    * Applications include: Chemistry, ODEs, Circuit simulation
+
+_To learn more about cuSOLVER:_ [https://developer.nvidia.com/cuSOLVER](https://developer.nvidia.com/cuSOLVER)
+
+### <A name="cufft"></A> cuFFT (Fast Fourier Transformation)
+
+The FFT is a divide-and-conquer algorithm for efficiently computing discrete Fourier transforms of complex or real-valued data sets. It is one of the most important and widely used numerical algorithms in computational physics and general signal processing.
+
+![cufft](./images/cufft.jpg "cuFFT")
+
+_To learn more about cuFFT:_ [https://developer.nvidia.com/cuFFT](https://developer.nvidia.com/cuFFT)
+
+### <A name="curand"></A> cuRAND (Random Number)
+
+The cuRAND library provides facilities that focus on the simple and efficient generation of high-quality pseudorandom and quasirandom numbers. A pseudorandom sequence of numbers satisfies most of the statistical properties of a truly random sequence but is generated by a deterministic algorithm. A quasirandom sequence of n -dimensional points is generated by a deterministic algorithm designed to fill an n-dimensional space evenly.
+
+Random numbers can be generated on the device or on the host CPU.
+
+![cuRAND](./images/curand.jpg "cuRAND")
+
+_To learn more about cuRAND:_ [https://developer.nvidia.com/cuRAND](https://developer.nvidia.com/cuRAND)
+
+### <A name="cudnn"></A> cuDNN (Deep Neural Network)
+
+![cuDNN](./images/cudnn.png "cuDNN")
+
+cuDNN is a GPU-accelerated library of primitives for deep neural networks. It provides highly tuned implementations of routines arising frequently in DNN applications:
+
+* Convolution forward and backward, including cross-correlation
+* Pooling forward and backward
+* Softmax forward and backward
+* Neuron activations forward and backward:
+    * Rectified linear (ReLU)
+    * Sigmoid
+    * Hyperbolic tangent (TANH)
+* Tensor transformation functions
+
+_To learn more about cuDNN:_ [https://developer.nvidia.com/cuDNN](https://developer.nvidia.com/cuDNN)
+
+### <A name="npp"></A> NPP (NVIDIA Performance Primitive)
+
+NVIDIA Performance Primitive (NPP) is a library of functions for performing CUDA accelerated processing. The initial set of
+functionality in the library focuses on imaging and video processing and is widely applicable for developers
+in these areas. NPP will evolve over time to encompass more of the compute heavy tasks in a variety of problem domains.
+
+* __Eliminates unnecessary copying of data to/from CPU memory__
+    * Process data that is already in GPU memory
+    * Leave results in GPU memory so they are ready for subsequent processing
+* __Data Exchange and Initialization__
+    * Set, Convert, Copy, CopyConstBorder, Transpose, SwapChannels
+* __Arithmetic and Logical Operations__
+    * Add, Sub, Mul, Div, AbsDiff, Threshold, Compare
+* __Color Conversion__
+    * RGBToYCbCr, YcbCrToRGB, YCbCrToYCbCr, ColorTwist, LUT_Linear
+* __Filter Functions__
+    * FilterBox, Filter, FilterRow, FilterColumn, FilterMax, FilterMin, Dilate, Erode, SumWindowColumn, SumWindowRow
+* __JPEG__
+    * DCTQuantInv, DCTQuantFwd, QuantizationTableJPEG
+* __Geometry Transforms__
+    * Mirror, WarpAffine, WarpAffineBack, WarpAffineQuad, WarpPerspective, WarpPerspectiveBack  , WarpPerspectiveQuad, Resize
+* __Statistics Functions__
+    * Mean_StdDev, NormDiff, Sum, MinMax, HistogramEven, RectStdDev
+
+_To learn more about NPP:_ [https://developer.nvidia.com/NPP](https://developer.nvidia.com/NPP)
