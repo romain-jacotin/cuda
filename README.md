@@ -253,14 +253,15 @@ CUDA C extends C by allowing the programmer to define C functions, called kernel
 
 The CUDA programming model assumes that the CUDA threads execute on a physically separate device that operates as a coprocessor to the host running the C program. This is the case, for example, when the kernels execute on a GPU and the rest of the Golang program executes on a CPU.
 
-Calling a kernel function from the Host launch a grid of thread blocks on the Device:
+__Calling a kernel function from the Host launch a grid of thread blocks on the Device:__
 
 ![Heterogeneous Programming](./images/heterogeneous_programming.png "Heterogeneous Programming")
 
 ### <A name="kernel"></A> Kernel
 
-A kernel is a special C function defined using the `__global__` declaration specifier and the number of CUDA threads that execute that kernel for a given kernel call is specified using a new `<<<...>>>` execution configuration syntax. Each thread that executes the kernel is given a unique thread ID that is accessible within the kernel through the built-in threadIdx variable.
+A kernel is a special C function defined using the `__global__` declaration specifier and the number of CUDA threads that execute that kernel for a given kernel call is specified using a new `<<<...>>>` execution configuration syntax. Each thread that executes the kernel is given a unique thread ID that is accessible within the kernel through the built-in `threadIdx` variable.
 
+__The following sample code adds two vectors A and B of size N and stores the result into vector C:__
 ```c
 // Kernel definition
 __global__ void VecAdd(float* A, float* B, float* C) {
@@ -270,13 +271,14 @@ __global__ void VecAdd(float* A, float* B, float* C) {
 
 int main() {
    ...
-   // Kernel invocation with N threads
-   VecAdd<<<1, N>>>(A, B, C);
+   // Kernel invocation of 1 Block with 16 threads
+   VecAdd<<< 1, 16 >>>(A, B, C);
    ...
 }
 ```
+Here, each of the 16 threads that execute `VecAdd()` performs one pair-wise addition:
 
-![Thread Hierarchy](./images/grid_of_thread_blocks.png "Thread Hierarchy")
+![Kernel invocation 1 Block of 16 Threads](./images/kernel1block16threads.png "Kernel invocation 1 Block of 16 Threads")
 
 ### <A name="thread"></A> Thread
 
@@ -285,14 +287,15 @@ For convenience, `threadIdx` is a 3-component vector, so that threads can be ide
 The index of a thread and its thread ID relate to each other in a straightforward way:
 
 * For a one-dimensional block of size (Dx), the thread ID of a thread of index (x) are the same:
-    * `threadId = x`
+    * `= x`
 * For a two-dimensional block of size (Dx, Dy), the thread ID of a thread of index (x, y) is:
-    * `threadID = x + y*Dx`
+    * `= x + y*Dx`
 * For a three-dimensional block of size (Dx, Dy, Dz), the thread ID of a thread of index (x, y, z) is:
-    * `threadId = x + y*Dx + z Dx*Dy`.
+    * `= x + y*Dx + z Dx*Dy`.
 
 _Note: Even if the programmer want to use 1, 2 or 3 dimensions for his data representation, Memory is still a 1 dimension vector at the end ..._ 
 
+__The following code adds two matrices A and B of size NxN and stores the result into matrix C:__
 ```c
 // Kernel definition
 __global__ void MatAdd(float A[N][N], float B[N][N], float C[N][N]) {
@@ -304,9 +307,8 @@ __global__ void MatAdd(float A[N][N], float B[N][N], float C[N][N]) {
 int main() {
   ...
   // Kernel invocation with one block of N * N * 1 threads
-  int numBlocks = 1;
   dim3 threadsPerBlock(N, N);
-  MatAdd<<<numBlocks, threadsPerBlock>>>(A, B, C);
+  MatAdd<<< 1, threadsPerBlock >>>(A, B, C);
   ...
 }
 ```
@@ -315,10 +317,61 @@ int main() {
 
 The multiprocessor creates, manages, schedules, and executes threads in groups of 32 parallel threads called warps. Individual threads composing a warp start together at the same program address, but they have their own instruction address counter and register state and are therefore free to branch and execute independently. The term warp originates from weaving, the first parallel thread technology.
 
+![Warp](./images/warp.jpg "Warp")
+
+When a multiprocessor is given one or more thread blocks to execute, it partitions them into warps and each warp gets scheduled by a warp scheduler for execution. The way a block is partitioned into warps is always the same; each warp contains threads of consecutive, increasing thread IDs with the first warp containing thread 0.
+
+A warp executes one common instruction at a time, so full efficiency is realized when all 32 threads of a warp agree on their execution path. If threads of a warp diverge via a data-dependent conditional branch, the warp serially executes each branch path taken, disabling threads that are not on that path, and when all paths complete, the threads converge back to the same execution path. Branch divergence occurs only within a warp; different warps execute independently regardless of whether they are executing common or disjoint code paths.
+
 ![Thread Divergence](./images/thread_divergence.png "Thread Divergence")
 
+The threads of a warp that are on that warp's current execution path are called the active threads, whereas threads not on the current path are inactive (disabled). Threads can be inactive because they have exited earlier than other threads of their warp, or because they are on a different branch path than the branch path currently executed by the warp, or because they are the last threads of a block whose number of threads is not a multiple of the warp size.
+
 ### <A name="block"></A> Block
+
+Blocks are organized into a one-dimensional, two-dimensional, or three-dimensional grid of thread blocks.
+
+The number of threads per block and the number of blocks per grid specified in the `<<<...>>>` syntax can be of type `int` or `dim3`. Two-dimensional blocks or grids can be specified as in the example above.
+
+* Each block within the grid can be identified by a one-dimensional, two-dimensional, or three-dimensional index accessible within the kernel through the built-in `blockIdx` variable.
+* The dimension of the thread block is accessible within the kernel through the built-in `blockDim` variable.
+
+```c
+// Kernel definition
+__global__ void fooKernel( ... )
+{
+  unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
+  unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
+}
+
+int main()
+{
+  ...
+  // Kernel invocation with 3x2 blocks of 4x3 threads
+  dim3 dimGrid(3, 2, 1);
+  dim3 dimBlock(4, 3, 1);
+  fooKernel<<< dimGrid, dimBlock  >>>( ... );
+  ...
+}
+```
+
+Consequence of `fooKernel<<< dimGrid, dimBlock >>>` invocation is the launch of a Grid consisting of 3x2 Blocks with 4x3 Threads in each block:
+
+![Thread Hierarchy](./images/grid_of_thread_blocks.png "Thread Hierarchy")
+
 ### <A name="grid"></A> Grid
+
+There is a limit to the number of threads per block, since all threads of a block are expected to reside on the same processor core and must share the limited memory resources of that core. On current GPUs, a thread block may contain up to 1024 threads.
+
+However, a kernel can be executed by multiple equally-shaped thread blocks, so that the total number of threads is equal to the number of threads per block times the number of blocks.
+
+The number of thread blocks in a grid is usually dictated by the size of the data being processed or the number of processors in the system, which it can greatly exceed.
+
+__Automatic Scalability__
+
+A GPU is built around an array of Streaming Multiprocessors (SMs). A Grid is partitioned into blocks of threads that execute independently from each other, so that a GPU with more multiprocessors will automatically execute the Grid in less time than a GPU with fewer multiprocessors.
+
+![Automatic Scalability](./images/automatic_scalability.png "Automatic Scalability")
 
 ----------------------------
 
