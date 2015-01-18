@@ -259,15 +259,58 @@ Calling a kernel function from the Host launch a grid of thread blocks on the De
 
 ### <A name="kernel"></A> Kernel
 
-A kernel is a special C function defined using the `__global__` declaration specifier and the number of CUDA threads that execute that kernel for a given kernel call is specified using a new <<<...>>>execution configuration syntax. Each thread that executes the kernel is given a unique thread ID that is accessible within the kernel through the built-in threadIdx variable.
+A kernel is a special C function defined using the `__global__` declaration specifier and the number of CUDA threads that execute that kernel for a given kernel call is specified using a new `<<<...>>>` execution configuration syntax. Each thread that executes the kernel is given a unique thread ID that is accessible within the kernel through the built-in threadIdx variable.
 
 ```c
-// Kernel definition __global__ void VecAdd(float* A, float* B, float* C) { int i = threadIdx.x; C[i] = A[i] + B[i]; } int main() { ... // Kernel invocation with N threads VecAdd<<<1, N>>>(A, B, C); ... } - See more at: file:///Developer/NVIDIA/CUDA-7.0/doc/html/cuda-c-programming-guide/index.html#page-locked-host-memory
+// Kernel definition
+__global__ void VecAdd(float* A, float* B, float* C) {
+  int i = threadIdx.x;
+  C[i] = A[i] + B[i];
+}
+
+int main() {
+   ...
+   // Kernel invocation with N threads
+   VecAdd<<<1, N>>>(A, B, C);
+   ...
+}
 ```
 
 ![Thread Hierarchy](./images/grid_of_thread_blocks.png "Thread Hierarchy")
 
 ### <A name="thread"></A> Thread
+
+For convenience, `threadIdx` is a 3-component vector, so that threads can be identified using a one-dimensional, two-dimensional, or three-dimensional thread index, forming a one-dimensional, two-dimensional, or three-dimensional thread block. This provides a natural way to invoke computation across the elements in a domain such as a vector, matrix, or volume.
+
+The index of a thread and its thread ID relate to each other in a straightforward way:
+
+* For a one-dimensional block of size (Dx), the thread ID of a thread of index (x) are the same:
+    * `threadId = x`
+* For a two-dimensional block of size (Dx, Dy), the thread ID of a thread of index (x, y) is:
+    * `threadID = x + y*Dx`
+* For a three-dimensional block of size (Dx, Dy, Dz), the thread ID of a thread of index (x, y, z) is:
+    * `threadId = x + y*Dx + z Dx*Dy`.
+
+_Note: Even if the programmer want to use 1, 2 or 3 dimensions for his data representation, Memory is still a 1 dimension vector at the end ..._ 
+
+```c
+// Kernel definition
+__global__ void MatAdd(float A[N][N], float B[N][N], float C[N][N]) {
+  int i = threadIdx.x;
+  int j = threadIdx.y;
+  C[i][j] = A[i][j] + B[i][j];
+}
+
+int main() {
+  ...
+  // Kernel invocation with one block of N * N * 1 threads
+  int numBlocks = 1;
+  dim3 threadsPerBlock(N, N);
+  MatAdd<<<numBlocks, threadsPerBlock>>>(A, B, C);
+  ...
+}
+```
+
 ### <A name="warp"></A> Warp
 
 The multiprocessor creates, manages, schedules, and executes threads in groups of 32 parallel threads called warps. Individual threads composing a warp start together at the same program address, but they have their own instruction address counter and register state and are therefore free to branch and execute independently. The term warp originates from weaving, the first parallel thread technology.
