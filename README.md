@@ -47,6 +47,9 @@ This document is just a high level overview of CUDA features and CUDA programmin
 * [Multi-Device System](#multidevicesystem)
     * [Stream and Event Behavior](#streamandeventbehavior)
     * [GPU Direct](#gpudirect)
+
+## Annexes
+
 * [CUDA Libraries](#cudalibraries)
     * [cuBLAS](#cublas)
     * [cuSPARSE](#cusparse)
@@ -55,6 +58,7 @@ This document is just a high level overview of CUDA features and CUDA programmin
     * [cuRAND](#curand)
     * [cuDNN](#cudnn)
     * [NPP](#npp)
+* [Atomic Functions](#fullatomicfunctions)
 
 ----------------------------
 
@@ -344,30 +348,17 @@ CUDA threads may access data from multiple memory spaces during their execution:
 ## <A name="asynchronousconcurrencyexecution"></A> Asynchronous Concurrency Execution
 ### <A name="concurrentdataaccess"></A> Concurrent Data Access
 #### <A name="synchronizefunctions"></A> Synchronize Functions
-#### <A name="atomicfunction"></A> Atomic Functions
+
+#### <A name="atomicfunctions"></A> Atomic Functions
 
 An atomic function performs a read-modify-write atomic operation on one 32-bit or 64-bit word residing in global or shared memory. For example, `atomicAdd()` reads a word at some address in global or shared memory, adds a number to it, and writes the result back to the same address. __The operation is atomic in the sense that it is guaranteed to be performed without interference from other threads: no other thread can access this address until the operation is complete__.
 
 * Atomic functions can only be used in device functions.
 * Atomic functions operating on mapped page-locked memory (Mapped Memory) are not atomic from the point of view of the host or other devices.
 
-| FUNCTION | DESCRIPTION |
+| Arithmetic Functions | Bitwise Functions |
 |---|---|
-| | |
-| __Arithmetic__ | |
-| atomicAdd | `int atomicAdd(int* address, int val)` <BR> `int atomicAdd(int* address, int val)` <BR> `unsigned int atomicAdd(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicAdd(unsigned long long int* address, unsigned long long int val)` <BR> `float atomicAdd(float* address, float val)` <BR><BR> Reads the 32-bit or 64-bit word old located at the address `address` in global or shared memory, computes `old + val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. The floating-point version of atomicAdd() is only supported by devices of compute capability 2.x and higher. |
-| atomicSub | `int atomicSub(int* address, int val)` <BR> `unsigned int atomicSub(unsigned int* address, unsigned int val)` <BR><BR> Reads the 32-bit word `old` located at the address `address` in global or shared memory, computes `old - val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
-| atomicExch | `int atomicExch(int* address, int val)` <BR> `unsigned int atomicExch(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicExch(unsigned long long int* address, unsigned long long int val)` <BR> `float atomicExch(float* address, float val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory and stores `val` back to memory at the same address. These two operations are performed in one atomic transaction. The function returns `old`. |
-| atomicMin | `int atomicMin(int* address, int val)` <BR> `unsigned int atomicMin(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicMin(unsigned long long int* address, unsigned long long int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes the minimum of `old` and `val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. The 64-bit version of atomicMin() is only supported by devices of compute capability 3.5 and higher. |
-| atomicMax | `int atomicMax(int* address, int val)` <BR> `unsigned int atomicMax(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicMax(unsigned long long int* address, unsigned long long int val)` <BR><BR> Reads the 32-bit or 64-bit word old located at the address `address` in global or shared memory, computes the maximum of `old` and `val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. The 64-bit version of atomicMax() is only supported by devices of compute capability 3.5 and higher. |
-| atomicInc | `unsigned int atomicInc(unsigned int* address, unsigned int val)` <BR><BR> Reads the 32-bit word old located at the address `address` in global or shared memory, computes `(old >= val) ? 0 : (old+1)`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
-| atomicDec | `unsigned int atomicDec(unsigned int* address, unsigned int val)` <BR><BR> Reads the 32-bit word `old` located at the address `address` in global or shared memory, computes `((old == 0) | (old > val)) ? val : (old-1)`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
-| atomicCAS | `int atomicCAS(int* address, int compare, int val)` <BR> `unsigned int atomicCAS(unsigned int* address, unsigned int compare, unsigned int val)` <BR>`unsigned long long int atomicCAS(unsigned long long int* address, unsigned long long int compare, unsigned long long int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old == compare ? val : old` , and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old` (Compare And Swap). |
-| | |
-| __Bitwise__ | |
-| atomicAnd | `int atomicAnd(int* address, int val)`<BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old & val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
-| atomicOr | `int atomicOr(int* address, int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old | val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
-| atomicXor | `int atomicXor(int* address, int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old ^ val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicAdd <BR> atomicSub <BR> atomicExch <BR> atomicMin <BR> atomicMax <BR> atomicInc <BR> atomicDec <BR> atomicCAS | atomicAnd <BR> atomicOr <BR> atomicXor |
 
 ### <A name="concurrentkernelexecution"></A> Concurrent kernel execution
 ### <A name="concurrentdatatransfers"></A> Concurrent Data Transfers
@@ -444,6 +435,9 @@ Optimized pipeline for frame-based devices such as frame grabbers, video switche
 Using GPUDirect, 3rd party network adapters, solid-state drives (SSDs) and other devices can directly read and write CUDA host and device memory. GPUDirect eliminates unnecessary system memory copies, dramatically lowers CPU overhead, and reduces latency, resulting in significant performance improvements in data transfer times for applications running on NVIDIA products.
 
 ----------------------------
+
+## ANNEXES
+
 ## <A name="cudalibraries"></A> CUDA Libraries
 
 ### <A name="cublas"></A> cuBLAS (Basic Linear Algebra Subroutines)
@@ -559,3 +553,23 @@ in these areas. NPP will evolve over time to encompass more of the compute heavy
     * Mean_StdDev, NormDiff, Sum, MinMax, HistogramEven, RectStdDev
 
 _To learn more about NPP:_ [https://developer.nvidia.com/NPP](https://developer.nvidia.com/NPP)
+
+### <A name="fullatomicfunctions"></A> Atomic Functions
+
+| FUNCTION | DESCRIPTION |
+|---|---|
+| | |
+| __Arithmetic__ | |
+| atomicAdd | `int atomicAdd(int* address, int val)` <BR> `int atomicAdd(int* address, int val)` <BR> `unsigned int atomicAdd(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicAdd(unsigned long long int* address, unsigned long long int val)` <BR> `float atomicAdd(float* address, float val)` <BR><BR> Reads the 32-bit or 64-bit word old located at the address `address` in global or shared memory, computes `old + val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. The floating-point version of atomicAdd() is only supported by devices of compute capability 2.x and higher. |
+| atomicSub | `int atomicSub(int* address, int val)` <BR> `unsigned int atomicSub(unsigned int* address, unsigned int val)` <BR><BR> Reads the 32-bit word `old` located at the address `address` in global or shared memory, computes `old - val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicExch | `int atomicExch(int* address, int val)` <BR> `unsigned int atomicExch(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicExch(unsigned long long int* address, unsigned long long int val)` <BR> `float atomicExch(float* address, float val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory and stores `val` back to memory at the same address. These two operations are performed in one atomic transaction. The function returns `old`. |
+| atomicMin | `int atomicMin(int* address, int val)` <BR> `unsigned int atomicMin(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicMin(unsigned long long int* address, unsigned long long int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes the minimum of `old` and `val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. The 64-bit version of atomicMin() is only supported by devices of compute capability 3.5 and higher. |
+| atomicMax | `int atomicMax(int* address, int val)` <BR> `unsigned int atomicMax(unsigned int* address, unsigned int val)` <BR> `unsigned long long int atomicMax(unsigned long long int* address, unsigned long long int val)` <BR><BR> Reads the 32-bit or 64-bit word old located at the address `address` in global or shared memory, computes the maximum of `old` and `val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. The 64-bit version of atomicMax() is only supported by devices of compute capability 3.5 and higher. |
+| atomicInc | `unsigned int atomicInc(unsigned int* address, unsigned int val)` <BR><BR> Reads the 32-bit word old located at the address `address` in global or shared memory, computes `(old >= val) ? 0 : (old+1)`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicDec | `unsigned int atomicDec(unsigned int* address, unsigned int val)` <BR><BR> Reads the 32-bit word `old` located at the address `address` in global or shared memory, computes `((old == 0) | (old > val)) ? val : (old-1)`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicCAS | `int atomicCAS(int* address, int compare, int val)` <BR> `unsigned int atomicCAS(unsigned int* address, unsigned int compare, unsigned int val)` <BR>`unsigned long long int atomicCAS(unsigned long long int* address, unsigned long long int compare, unsigned long long int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old == compare ? val : old` , and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old` (Compare And Swap). |
+| | |
+| __Bitwise__ | |
+| atomicAnd | `int atomicAnd(int* address, int val)`<BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old & val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicOr | `int atomicOr(int* address, int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old | val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
+| atomicXor | `int atomicXor(int* address, int val)` <BR><BR> Reads the 32-bit or 64-bit word `old` located at the address `address` in global or shared memory, computes `old ^ val`, and stores the result back to memory at the same address. These three operations are performed in one atomic transaction. The function returns `old`. |
