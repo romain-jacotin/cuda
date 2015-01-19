@@ -35,7 +35,7 @@ This document is just a high level overview of CUDA features and CUDA programmin
     * [Unified Memory](#unifiedmemory)
 * [Asynchronous Concurrency Execution](#asynchronousconcurrencyexecution)
     * [Concurrent Data Access](#Concurrent Data Access)
-        * [Synchronize Functions](#synchronizefunctions)
+        * [Threads Synchronization](#threadssynchronization)
         * [Atomic Functions](#atomicfunctions)
     * [Concurrent Kernel Execution](#concurrentkernelexecution)
     * [Concurrent Data Transfers](#concurrentdatatransfers)
@@ -149,7 +149,7 @@ __Calling a kernel function from the Host launch a grid of thread blocks on the 
 
 A kernel is a special C function defined using the `__global__` declaration specifier and the number of CUDA threads that execute that kernel for a given kernel call is specified using a new `<<<...>>>` execution configuration syntax. Each thread that executes the kernel is given a unique thread ID that is accessible within the kernel through the built-in `threadIdx` variable.
 
-__The following sample code adds two vectors A and B of size N and stores the result into vector C:__
+__The following sample code adds two vectors A and B of size 16 and stores the result into vector C:__
 ```c
 // Kernel definition
 __global__ void VecAdd(float* A, float* B, float* C) {
@@ -257,6 +257,8 @@ The number of thread blocks in a grid is usually dictated by the size of the dat
 
 __Automatic Scalability__
 
+Thread blocks are required to execute independently: It must be possible to execute them in any order, in parallel or in series. This independence requirement allows thread blocks to be scheduled in any order across any number of cores, enabling programmers to write code that scales with the number of cores.
+
 A GPU is built around an array of Streaming Multiprocessors (SMs). A Grid is partitioned into blocks of threads that execute independently from each other, so that a GPU with more multiprocessors will automatically execute the Grid in less time than a GPU with fewer multiprocessors.
 
 ![Automatic Scalability](./images/automatic_scalability.png "Automatic Scalability")
@@ -359,7 +361,16 @@ __Unified Memory is first and foremost a productivity feature that provides a sm
 
 ## <A name="asynchronousconcurrencyexecution"></A> Asynchronous Concurrency Execution
 ### <A name="concurrentdataaccess"></A> Concurrent Data Access
-#### <A name="synchronizefunctions"></A> Synchronize Functions
+
+#### <A name="threadssynchronization"></A> Threads Synchronization
+
+Threads can access each other's results through shared and global memory: they can work together. What if a thread reads a result before another thread writes it ? __Threads need to synchronize.__
+
+Thread blocks are required to execute independently: It must be possible to execute them in any order, in parallel or in series. This independence requirement allows thread blocks to be scheduled in any order across any number of cores, enabling programmers to write code that scales with the number of cores.
+
+But threads within a block can cooperate by sharing data through some shared memory and by synchronizing their execution to coordinate memory accesses. More precisely, one can specify synchronization points in the kernel by calling the `__syncthreads()` intrinsic function. `__syncthreads()` acts as a barrier at which all threads in the block must wait before any is allowed to proceed.
+
+The `__syncthreads()` command is a __block level synchronization barrier__. That means is safe to be used when all threads in a block reach the barrier.
 
 #### <A name="atomicfunctions"></A> Atomic Functions
 
