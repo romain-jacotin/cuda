@@ -388,7 +388,7 @@ An atomic function performs a read-modify-write atomic operation on one 32-bit o
 
 ### <A name="concurrentexecutionhostdevice"></A> Concurrent Execution between Host and Device
 
-In order to facilitate concurrent execution between host and device, some function calls are asynchronous: Control is returned to the host thread before the device has completed the requested task. These are:
+In order to facilitate concurrent execution between host and device, some function calls are asynchronous:
 
 * Kernel launches
 * Memory copies between two addresses to the same device memory
@@ -396,13 +396,17 @@ In order to facilitate concurrent execution between host and device, some functi
 * Memory copies performed by functions that are suffixed with Async
 * Memory set function calls
 
+Control is returned to the host thread before the device has completed the requested task.
+
 ### <A name="concurrentdatatransfers"></A> Concurrent Data Transfers
 
 Devices with Compute Capability >= 2.0 can perform a copy from page-locked host memory to device memory concurrently with a copy from device memory to page-locked host memory.
 
+Applications may query this capability by checking the `asyncEngineCount` device property, which is equal to 2 for devices that support it.
+
 ### <A name="concurrentkernelexecution"></A> Concurrent Kernel Execution
 
-Devices with compute capability >= 2.0 and can execute multiple kernels concurrently.
+Devices with compute capability >= 2.0 and can execute multiple kernels concurrently. Applications may query this capability by checking the `concurrentKernels` device property, which is equal to 1 for devices that support it.
 
 The maximum number of kernel launches that a device can execute concurrently is:
 
@@ -418,7 +422,7 @@ A kernel from one CUDA context cannot execute concurrently with a kernel from an
 
 ### <A name="overlapdatakernel"></A> Overlap of Data Transfer and Kernel Execution
 
-
+Some devices can perform copies between page-locked host memory and device memory concurrently with kernel execution. Applications may query this capability by checking the `asyncEngineCount` device property (see Device Enumeration), which is greater than zero for devices that support it.
 
 ### <A name="streams"></A> Streams
 #### <A name="callbacks"></A> Callbacks
