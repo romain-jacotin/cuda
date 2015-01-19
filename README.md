@@ -37,8 +37,10 @@ This document is just a high level overview of CUDA features and CUDA programmin
     * [Concurrent Data Access](#Concurrent Data Access)
         * [Threads Synchronization](#threadssynchronization)
         * [Atomic Functions](#atomicfunctions)
-    * [Concurrent Kernel Execution](#concurrentkernelexecution)
+    * [Concurrent Execution between Host and Device](#concurrentexecutionhostdevice)
     * [Concurrent Data Transfers](#concurrentdatatransfers)
+    * [Concurrent Kernel Execution](#concurrentkernelexecution)
+    * [Overlap of Data Transfer and Kernel Execution](#overlapdatakernel)
     * [Streams](#streams)
         * [Callbacks](#callbacks)
         * [Events](#events)
@@ -360,6 +362,7 @@ __Unified Memory is first and foremost a productivity feature that provides a sm
 ----------------------------
 
 ## <A name="asynchronousconcurrencyexecution"></A> Asynchronous Concurrency Execution
+
 ### <A name="concurrentdataaccess"></A> Concurrent Data Access
 
 #### <A name="threadssynchronization"></A> Threads Synchronization
@@ -383,8 +386,40 @@ An atomic function performs a read-modify-write atomic operation on one 32-bit o
 |---|---|
 | atomicAdd <BR> atomicSub <BR> atomicExch <BR> atomicMin <BR> atomicMax <BR> atomicInc <BR> atomicDec <BR> atomicCAS | atomicAnd <BR> atomicOr <BR> atomicXor |
 
-### <A name="concurrentkernelexecution"></A> Concurrent kernel execution
+### <A name="concurrentexecutionhostdevice"></A> Concurrent Execution between Host and Device
+
+In order to facilitate concurrent execution between host and device, some function calls are asynchronous: Control is returned to the host thread before the device has completed the requested task. These are:
+
+* Kernel launches
+* Memory copies between two addresses to the same device memory
+* Memory copies from host to device of a memory block of 64 KB or less
+* Memory copies performed by functions that are suffixed with Async
+* Memory set function calls
+
 ### <A name="concurrentdatatransfers"></A> Concurrent Data Transfers
+
+Devices with Compute Capability >= 2.0 can perform a copy from page-locked host memory to device memory concurrently with a copy from device memory to page-locked host memory.
+
+### <A name="concurrentkernelexecution"></A> Concurrent Kernel Execution
+
+Devices with compute capability >= 2.0 and can execute multiple kernels concurrently.
+
+The maximum number of kernel launches that a device can execute concurrently is:
+
+| Compute Capability | Maximum number of concurrent kernels per GPU |
+|---|---|---|
+| 1.x | _not supported_ |
+| 2.x | 16 |
+| 3.0,  3.2 | 16 |
+| 3.5, 3.7 | 32 |
+| 5.0, 5.2 | 32 |
+
+A kernel from one CUDA context cannot execute concurrently with a kernel from another CUDA context.
+
+### <A name="overlapdatakernel"></A> Overlap of Data Transfer and Kernel Execution
+
+
+
 ### <A name="streams"></A> Streams
 #### <A name="callbacks"></A> Callbacks
 #### <A name="events"></A> Events
