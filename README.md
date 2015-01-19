@@ -343,6 +343,18 @@ CUDA threads may access data from multiple memory spaces during their execution:
 
 ### <A name="unifiedmemory"></A>Unified Memory
 
+Data that is shared between the CPU and GPU must be allocated in both memories, and explicitly copied between them by the program. This adds a lot of complexity to CUDA programs.
+
+Unified Memory creates a pool of managed memory that is shared between the CPU and GPU, bridging the CPU-GPU divide. Managed memory is accessible to both the CPU and GPU using a single pointer. The key is that the system automatically migrates data allocated in Unified Memory between host and device so that it looks like CPU memory to code running on the CPU, and like GPU memory to code running on the GPU.
+
+The CUDA runtime hides all the complexity, automatically migrating data to the place where it is accessed.
+
+![Unified Memory](./images/unified_memory.png "Unified Memory")
+
+An important point is that a carefully tuned CUDA program that uses streams and cudaMemcpyAsync to efficiently overlap execution with data transfers may very well perform better than a CUDA program that only uses Unified Memory. Understandably so: the CUDA runtime never has as much information as the programmer does about where data is needed and when! CUDA programmers still have access to explicit device memory allocation and asynchronous memory copies to optimize data management and CPU-GPU concurrency.
+
+__Unified Memory is first and foremost a productivity feature that provides a smoother on-ramp to parallel computing, without taking away any of CUDA’s features for power users.__
+
 ----------------------------
 
 ## <A name="asynchronousconcurrencyexecution"></A> Asynchronous Concurrency Execution
