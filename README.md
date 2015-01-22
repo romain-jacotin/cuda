@@ -422,11 +422,69 @@ A kernel from one CUDA context cannot execute concurrently with a kernel from an
 
 ### <A name="overlapdatakernel"></A> Overlap of Data Transfer and Kernel Execution
 
-Some devices can perform copies between page-locked host memory and device memory concurrently with kernel execution. Applications may query this capability by checking the `asyncEngineCount` device property (see Device Enumeration), which is greater than zero for devices that support it.
+Some devices can perform copies between page-locked host memory and device memory concurrently with kernel execution.
 
 ### <A name="streams"></A> Streams
+
+Applications manage concurrency through streams. A stream is a sequence of commands (possibly issued by different host threads) that execute in order. Different streams, on the other hand, may execute their commands out of order with respect to one another or concurrently.
+
+A stream is defined by creating a stream object and specifying it as the stream parameter to a sequence of kernel launches and host <-> device memory copies.
+
+The amount of execution overlap between two streams depends on the order in which the commands are issued to each stream and whether or not the device supports overlap of data transfer and kernel execution, concurrent kernel execution, and/or concurrent data transfers.
+
+#### Default Stream
+
+Kernel launches and host <-> device memory copies that do not specify any stream parameter, or equivalently that set the stream parameter to zero, are issued to the default stream. They are therefore executed in order in the default stream.
+
+The relative priorities of streams can be specified at creation. At runtime, as blocks in low-priority schemes finish, waiting blocks in higher-priority streams are scheduled in their place.
+
+#### Explicit Synchronization
+
+There are various ways to explicitly synchronize streams with each other.
+
+| Synchonization functions | Description |
+|---|---|
+| `cudaDeviceSynchronize()` | Waits until all preceding commands in ALL streams of ALL host threads have completed. |
+| `cudaStreamSynchronize()` | Takes a stream as a parameter and waits until all preceding commands in the given stream have completed. It can be used to synchronize the host with a specific stream, allowing other streams to continue executing on the device. |
+| `cudaStreamWaitEvent()` | Takes a stream and an event as parameters and makes all the commands added to the given stream after the call to `cudaStreamWaitEvent()` delay their execution until the given event has completed. The stream can be 0, in which case all the commands added to any stream after the call to `cudaStreamWaitEvent()` wait on the event. |
+| `cudaStreamQuery()` | Provides applications with a way to know if all preceding commands in a stream have completed. |
+
+To avoid unnecessary slowdowns, all these synchronization functions are usually best used for timing purposes or to isolate a launch or memory copy that is failing.
+
+#### Implicit Synchronization
+
+Two commands from different streams cannot run concurrently if any one of the following operations is issued in-between them by the host thread:
+
+* a page-locked host memory allocation,
+* a device memory allocation,
+* a device memory set,
+* a memory copy between two addresses to the same device memory,
+* any CUDA command to the NULL stream,
+* a switch between the L1/shared memory configurations ( Compute Capability 2.x and 3.x).
+
+For devices that support concurrent kernel execution and are of compute capability 3.0 or lower, any operation that requires a dependency check to see if a streamed kernel launch is complete:
+
+* Can start executing only when all thread blocks of all prior kernel launches from any stream in the CUDA context have started executing;
+* Blocks all later kernel launches from any stream in the CUDA context until the kernel launch being checked is complete.
+* Operations that require a dependency check include any other commands within the same stream as the launch being checked and any call to `cudaStreamQuery()` on that stream.
+
+Therefore, applications should follow these guidelines to improve their potential for concurrent kernel execution:
+
+* All independent operations should be issued before dependent operations,
+* Synchronization of any kind should be delayed as long as possible.
+
 #### <A name="callbacks"></A> Callbacks
+
+The runtime provides a way to insert a callback at any point into a stream via cudaStreamAddCallback(). A callback is a function that is executed on the host once all commands issued to the stream before the callback have completed. Callbacks in stream 0 are executed once all preceding tasks and commands issued in all streams before the callback have completed.
+
+The commands that are issued in a stream (or all commands issued to any stream if the callback is issued to stream 0) after a callback do not start executing before the callback has completed.
+
+_A callback must not make CUDA API calls (directly or indirectly), as it might end up waiting on itself if it makes such a call leading to a deadlock._
+
 #### <A name="events"></A> Events
+
+The runtime also provides a way to closely monitor the device's progress, as well as perform accurate timing, by letting the application asynchronously record events at any point in the program and query when these events are completed. An event has completed when all tasks - or optionally, all commands in a given stream - preceding the event have completed. Events in stream zero are completed after all preceding tasks and commands in all streams are completed.
+
 ### <A name="dynamicparallelism"></A> Dynamic Parallelism
 
 Dynamic Parallelism enables a CUDA kernel to create and synchronize new nested work, using the CUDA runtime API to launch other kernels, optionally
